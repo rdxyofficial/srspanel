@@ -8,7 +8,6 @@
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
-<!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 <style>
@@ -27,7 +26,6 @@ body{background:#0a0f1e;color:#e2e8f0;min-height:100vh}
 .overlay.show{display:block}
 .menu-item{display:flex;align-items:center;justify-content:space-between;padding:11px 14px;color:#94a3b8;border-radius:10px;cursor:pointer;font-size:13.5px;transition:.2s;user-select:none}
 .menu-item:hover{background:rgba(245,184,27,.1);color:#f5b81b}
-.menu-item.active{background:rgba(245,184,27,.15);color:#f5b81b;border-left:3px solid #f5b81b}
 .menu-header{color:#f5b81b;font-size:11px;text-transform:uppercase;letter-spacing:1px;padding:12px 14px 6px;opacity:.7;font-weight:700}
 .hamburger{position:fixed;top:16px;left:16px;z-index:9999;background:rgba(10,15,30,.85);border:1px solid rgba(255,215,0,.15);border-radius:12px;padding:10px 12px;cursor:pointer}
 .hamburger span{display:block;width:24px;height:2px;background:#e2e8f0;margin:4px 0;border-radius:4px}
@@ -67,13 +65,13 @@ body{background:#0a0f1e;color:#e2e8f0;min-height:100vh}
 .market-card{background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.02));border-radius:18px;padding:22px 20px 18px;border:1px solid rgba(255,215,0,.08);position:relative;transition:.3s;display:flex;flex-direction:column;min-height:100%}
 .market-card:hover{border-color:#f5b81b;transform:translateY(-2px)}
 .market-badges{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px;min-height:22px}
-.market-badge{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:8px;font-size:10.5px;font-weight:800;letter-spacing:.2px}
+.market-badge{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:8px;font-size:10.5px;font-weight:800}
 .market-badge.best-price{background:#10b981;color:#04291d}
 .market-badge.popular{background:#3b82f6;color:#fff}
 .market-badge.discount{background:#06b6d4;color:#04212b}
-.market-title{font-size:22px;font-weight:800;color:#fff;line-height:1.15;letter-spacing:-.5px}
+.market-title{font-size:22px;font-weight:800;color:#fff;line-height:1.15}
 .market-price{margin:10px 0 6px;display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
-.market-price .current{font-size:38px;font-weight:900;color:#fff;letter-spacing:-1.5px;line-height:1}
+.market-price .current{font-size:38px;font-weight:900;color:#fff;line-height:1}
 .market-price .current .currency{font-size:20px;font-weight:800;margin-left:2px;color:#e2e8f0}
 .market-price .old{font-size:16px;color:#64748b;text-decoration:line-through;font-weight:600}
 .market-desc{color:#94a3b8;font-size:12px;margin-bottom:6px;line-height:1.5}
@@ -129,21 +127,20 @@ body{background:#0a0f1e;color:#e2e8f0;min-height:100vh}
 </head>
 <body>
 
-<div id="fbWarning" class="hidden">⚠️ Firebase yapılandırması eksik! Lütfen koddaki <code>firebaseConfig</code> alanını doldurun.</div>
-
+<div id="fbWarning" class="hidden">⚠️ Firebase yapılandırması eksik!</div>
 <div id="connStatus"><span class="dot"></span><span id="connText">Bağlanıyor...</span></div>
 
-<!-- BAKIM EKRANI -->
+<!-- BAKIM -->
 <div id="bakimEkran" class="hidden min-h-screen flex items-center justify-center p-4">
 <div class="glass rounded-3xl p-10 w-full max-w-md text-center">
 <div class="text-6xl mb-4">🔧</div>
 <h1 class="text-3xl font-bold gold mb-2">BAKIMDA!</h1>
-<p class="text-slate-400 text-sm mb-4">Sistem şu an bakım modunda. Lütfen daha sonra tekrar dene.</p>
+<p class="text-slate-400 text-sm mb-4">Sistem şu an bakım modunda.</p>
 <p class="text-xs text-slate-500">Sadece yönetici ve kurucu erişebilir.</p>
 </div>
 </div>
 
-<!-- GİRİŞ EKRANI -->
+<!-- GİRİŞ -->
 <div id="girisEkran" class="min-h-screen flex items-center justify-center p-4">
 <div class="glass rounded-3xl p-8 w-full max-w-md">
 <div class="text-center mb-6">
@@ -157,8 +154,8 @@ body{background:#0a0f1e;color:#e2e8f0;min-height:100vh}
 </div>
 <div id="loginPanel">
 <form onsubmit="girisYap(event)" class="space-y-3">
-<input type="text" id="loginUser" class="input-dark" placeholder="Kullanıcı adı veya E-posta" required autocomplete="username">
-<input type="password" id="loginPass" class="input-dark" placeholder="Şifre" required autocomplete="current-password">
+<input type="text" id="loginUser" class="input-dark" placeholder="Kullanıcı adı veya E-posta" required>
+<input type="password" id="loginPass" class="input-dark" placeholder="Şifre" required>
 <button type="submit" class="gold-bg w-full py-3 rounded-xl">Giriş Yap</button>
 </form>
 <div id="loginError" class="text-red-400 text-xs mt-3 text-center hidden"></div>
@@ -199,18 +196,17 @@ body{background:#0a0f1e;color:#e2e8f0;min-height:100vh}
 <div class="menu-item" onclick="sayfaGoster('bakiye')">💰 Bakiye Yükle</div>
 
 <div class="menu-header mt-4">Sorgu Çözümleri</div>
-
 <div class="menu-item menu-parent" onclick="menuToggle('mernis')">
 <span class="left">🔍 Mernis 2026</span>
 <span class="arrow" id="arrow-mernis">▸</span>
 </div>
 <div class="submenu" id="sub-mernis">
-<div class="sub-item" data-page="m_adosoyad" onclick="sayfaGoster('m_adosoyad')">Ad Soyad Sorgulama</div>
-<div class="sub-item" data-page="m_adosoyad_kapsamli" onclick="sayfaGoster('m_adosoyad_kapsamli')">Ad Soyad Kapsamlı <span class="badge-v1">V1</span></div>
-<div class="sub-item" data-page="m_tc" onclick="sayfaGoster('m_tc')">TC Kimlik Sorgulama</div>
-<div class="sub-item" data-page="m_tc_pro" onclick="sayfaGoster('m_tc_pro')">TC Pro Sorgulama</div>
-<div class="sub-item" data-page="m_vergi" onclick="sayfaGoster('m_vergi')">Vergi Dairesi Sorgulama</div>
-<div class="sub-item" data-page="m_medeni" onclick="sayfaGoster('m_medeni')">Medeni Hal Sorgulama</div>
+<div class="sub-item" onclick="sayfaGoster('m_adosoyad')">Ad Soyad Sorgulama</div>
+<div class="sub-item" onclick="sayfaGoster('m_adosoyad_kapsamli')">Ad Soyad Kapsamlı <span class="badge-v1">V1</span></div>
+<div class="sub-item" onclick="sayfaGoster('m_tc')">TC Kimlik Sorgulama</div>
+<div class="sub-item" onclick="sayfaGoster('m_tc_pro')">TC Pro Sorgulama</div>
+<div class="sub-item" onclick="sayfaGoster('m_vergi')">Vergi Dairesi Sorgulama</div>
+<div class="sub-item" onclick="sayfaGoster('m_medeni')">Medeni Hal Sorgulama</div>
 </div>
 
 <div class="menu-item menu-parent" onclick="menuToggle('aile')">
@@ -291,9 +287,7 @@ body{background:#0a0f1e;color:#e2e8f0;min-height:100vh}
 </div>
 <div class="text-slate-400 text-sm">👋 <span id="dashUser" class="gold">demo</span></div>
 </div>
-<div id="bakimBanner" class="hidden mb-4 p-3 rounded-xl bg-red-500/20 border border-red-500/40 text-center text-sm text-red-300">
-🔧 BAKIM MODU AKTİF — Sadece yönetici ve kurucu erişebilir
-</div>
+<div id="bakimBanner" class="hidden mb-4 p-3 rounded-xl bg-red-500/20 border border-red-500/40 text-center text-sm text-red-300">🔧 BAKIM MODU AKTİF</div>
 <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
 <div class="card text-center"><div class="stat-num" id="statUser">1</div><div class="stat-lbl">Toplam Kullanıcı</div></div>
 <div class="card text-center"><div class="stat-num gold" id="statMernis">0</div><div class="stat-lbl">Yapılan Sorgu</div></div>
@@ -302,12 +296,10 @@ body{background:#0a0f1e;color:#e2e8f0;min-height:100vh}
 </div>
 <div class="card mb-6">
 <h3 class="text-sm font-semibold text-white mb-3">📢 Duyurular</h3>
-<div id="duyuruListesi" class="text-slate-400 text-sm space-y-2">
-<div>• Sistem güncellendi — Mernis 2026 eklendi</div>
-</div>
+<div id="duyuruListesi" class="text-slate-400 text-sm space-y-2"></div>
 </div>
 <div class="card">
-<h3 class="text-sm font-semibold text-white mb-3">🟢 Aktif Kullanıcılar <span class="text-xs text-slate-500">(canlı — tüm cihazlardan)</span></h3>
+<h3 class="text-sm font-semibold text-white mb-3">🟢 Aktif Kullanıcılar <span class="text-xs text-slate-500">(canlı)</span></h3>
 <div id="aktifListe" class="text-sm text-slate-300 flex flex-wrap gap-2"></div>
 </div>
 </div>
@@ -351,7 +343,7 @@ body{background:#0a0f1e;color:#e2e8f0;min-height:100vh}
 </div>
 </div>
 
-<!-- SORGU (DİNAMİK) -->
+<!-- SORGU DİNAMİK -->
 <div id="page-sorgu" class="page hidden"></div>
 
 <!-- PREMIUM LOCKED -->
@@ -360,35 +352,32 @@ body{background:#0a0f1e;color:#e2e8f0;min-height:100vh}
 <div class="text-6xl mb-4">👑</div>
 <h2 class="text-3xl font-bold gold mb-3">Premium Bölge</h2>
 <p class="text-slate-300 text-sm mb-4">Bu bölüm sadece <span class="text-purple-400 font-bold">Premium</span> ve üzeri kullanıcılara açıktır.</p>
-<p class="text-xs text-slate-500 mb-6">Yetkini yükseltmek için market üzerinden premium paket satın al.</p>
-<a href="https://discord.gg/cybertech" target="_blank" class="gold-bg inline-block px-6 py-3 rounded-xl text-sm">💬 Discord'a Git</a>
 </div>
 </div>
 
-<!-- REFERANS SIRALAMASI -->
+<!-- REFERANS -->
 <div id="page-s_referans" class="page hidden">
 <h2 class="text-2xl font-bold text-white mb-1">📈 Referans Sıralaması</h2>
-<p class="text-slate-400 text-sm mb-6">En çok referans getirenler (1 ve üzeri).</p>
+<p class="text-slate-400 text-sm mb-6">En çok referans getirenler.</p>
 <div class="card"><div id="referansSiralama" class="space-y-2"></div></div>
 </div>
 
 <!-- DESTEK -->
 <div id="page-destek" class="page hidden">
 <h2 class="text-2xl font-bold text-white mb-1">🎧 Destek Sistemi</h2>
-<p class="text-slate-400 text-sm mb-6">7/24 destek ekibimizle Discord üzerinden iletişime geç.</p>
+<p class="text-slate-400 text-sm mb-6">7/24 destek.</p>
 <div class="card text-center py-8">
 <div class="text-6xl mb-4">💬</div>
 <h3 class="text-white font-bold text-lg mb-2">Discord Destek</h3>
-<p class="text-slate-400 text-xs mb-5">Sorunlarını ve taleplerini Discord sunucumuzdan ticket açarak iletebilirsin.</p>
+<p class="text-slate-400 text-xs mb-5">Sorunlarını Discord'tan ilet.</p>
 <a href="https://discord.gg/cybertech" target="_blank" class="gold-bg inline-block px-6 py-3 rounded-xl text-sm">Discord'a Katıl</a>
 </div>
 </div>
 
-<!-- YETKİLİ BÖLGESİ -->
+<!-- YETKİLİ -->
 <div id="page-yetkili" class="page hidden">
 <h2 class="text-2xl font-bold text-white mb-1">⚙️ Yetkili Bölgesi</h2>
-<p class="text-slate-400 text-sm mb-6">Admin ve üstü erişebilir. Tüm veriler canlı senkronize.</p>
-
+<p class="text-slate-400 text-sm mb-6">Admin ve üstü erişebilir.</p>
 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
 <div class="card">
 <h3 class="text-white font-bold mb-3">📢 Duyuru Ekle</h3>
@@ -403,23 +392,18 @@ body{background:#0a0f1e;color:#e2e8f0;min-height:100vh}
 <button onclick="yUrunEkle()" class="gold-bg w-full py-2 rounded-xl mt-3">Ekle</button>
 </div>
 </div>
-
 <div class="card mb-6">
 <h3 class="text-white font-bold mb-3">👥 Kullanıcı Rolleri</h3>
 <input id="yKullaniciAd" class="input-dark" placeholder="Kullanıcı adı">
 <button onclick="yKullaniciAra()" class="gold-bg w-full py-2 rounded-xl mt-3">Ara</button>
 <div id="yKullaniciSonuc" class="mt-3"></div>
 </div>
-
 <div class="card mb-6 hidden" id="bakimPanel">
 <h3 class="text-red-400 font-bold mb-3">🔧 Bakım Modu (Sadece Kurucu)</h3>
-<p class="text-slate-400 text-xs mb-3">Aktif olunca sadece yönetici ve kurucu siteye erişebilir. Diğerleri atılır.</p>
 <button id="bakimBtn" onclick="bakimToggle()" class="bg-red-500/20 text-red-400 px-6 py-2 rounded-xl text-sm font-semibold">Bakım Modunu Aç</button>
 </div>
-
 <div class="card hidden" id="pdPanel">
-<h3 class="gold font-bold mb-3">🗂️ PlayerData (Sadece Kurucu) — Canlı</h3>
-<p class="text-slate-400 text-xs mb-3">Tüm cihazlardaki kullanıcılar. Gerçek zamanlı güncellenir.</p>
+<h3 class="gold font-bold mb-3">🗂️ PlayerData (Sadece Kurucu)</h3>
 <button onclick="pdIndir()" class="gold-bg px-6 py-2 rounded-xl text-sm mb-3">📥 TXT İndir</button>
 <div id="pdArea" class="overflow-x-auto"></div>
 </div>
@@ -431,9 +415,7 @@ body{background:#0a0f1e;color:#e2e8f0;min-height:100vh}
 <div id="toast" class="fixed bottom-6 right-6 glass px-6 py-3 rounded-2xl hidden z-50 text-sm"></div>
 
 <script>
-/* ============================================================
-   🔥 FIREBASE YAPILANDIRMASI (SRS-PANEL)
-   ============================================================ */
+/* ============ FIREBASE ============ */
 const firebaseConfig = {
   apiKey: "AIzaSyDoHTKU9grC4qfMq0WjZDROGV2sTYQzAeY",
   authDomain: "srs-panel.firebaseapp.com",
@@ -443,30 +425,31 @@ const firebaseConfig = {
   messagingSenderId: "193183823075",
   appId: "1:193183823075:web:d26d9fce21c4fb3fda01d6"
 };
-/* ============================================================ */
 
 let db = null;
+let FB_READY = false;
+let FB_ERROR = null;
+
 try {
   firebase.initializeApp(firebaseConfig);
   db = firebase.database();
-  console.log('🔥 Firebase başlatıldı:', firebaseConfig.projectId);
+  console.log('🔥 Firebase başlatıldı');
 } catch(e){
-  console.error('Firebase başlatma hatası:', e);
-  document.getElementById('fbWarning').classList.remove('hidden');
-  document.getElementById('fbWarning').textContent = '❌ Firebase başlatılamadı: '+e.message;
+  FB_ERROR = e.message;
+  console.error('Firebase hatası:', e);
 }
 
-// ============ ROL SIRASI ============
+/* ============ ROL ============ */
 const ROLLER = ['Ücretsiz Üye','Premium','Admin','Yönetici','Kurucu'];
 const ROL_LOWER = ['ücretsiz üye','premium','admin','yönetici','kurucu'];
 
-// ============ GLOBAL STATE ============
+const YASAKLI = ['kurucu','owner','root','sahip','yönetici','yonetici'];
+
 let USERS = [];
 let AKTIF = [];
 let DUYURULAR = [];
 let MARKET = [];
 let BAKIM = false;
-let FB_READY = false;
 let aktifUser = null;
 
 const DEFAULT_MARKET = [
@@ -475,9 +458,7 @@ const DEFAULT_MARKET = [
   {id:'aylik',    ad:'Premium Aylık',    fiyat:300, normalFiyat:400, aciklama:'30 Gün boyunca sınırsız premium sorgu hakkı',  purchases:0, features:['Premium Sorgu Hakkı','Sınırsız Kullanım','Öncelikli Destek','Özel Fırsatlar']}
 ];
 
-const YASAKLI = ['kurucu','owner','root','sahip','yönetici','yonetici'];
-
-// ============ YARDIMCI ============
+/* ============ YARDIMCI ============ */
 function showToast(msg){
   const t = document.getElementById('toast');
   t.textContent = msg; t.classList.remove('hidden');
@@ -502,30 +483,329 @@ function setConnStatus(online, text){
 }
 function fbSet(path, value){ return db.ref(path).set(value); }
 
-// ============ SEED (İlk veri yazma) ============
+/* ============ İSİM NORMALİZASYON ============ */
+function normalizeName(str){
+  return String(str||'')
+    .toLowerCase()
+    .replace(/ı/g, 'i').replace(/İ/g, 'i').replace(/I/g, 'i')
+    .replace(/ş/g, 's').replace(/Ş/g, 's')
+    .replace(/ğ/g, 'g').replace(/Ğ/g, 'g')
+    .replace(/ü/g, 'u').replace(/Ü/g, 'u')
+    .replace(/ö/g, 'o').replace(/Ö/g, 'o')
+    .replace(/ç/g, 'c').replace(/Ç/g, 'c')
+    .replace(/\s+/g, ' ').trim();
+}
+
+/* ============ GERÇEKÇİ TC ÜRETİCİ ============ */
+function generateRealisticTC(){
+  const d = [1 + Math.floor(Math.random() * 9)];
+  for(let i = 1; i < 9; i++) d.push(Math.floor(Math.random() * 10));
+  const oddSum = d[0] + d[2] + d[4] + d[6] + d[8];
+  const evenSum = d[1] + d[3] + d[5] + d[7];
+  const t10 = ((oddSum * 7 - evenSum) % 10 + 10) % 10;
+  d.push(t10);
+  const sum10 = d.reduce((a,b)=>a+b,0);
+  d.push(sum10 % 10);
+  return d.join('');
+}
+
+/* ============ BİLİNEN İSİMLER (DEMO VERİ) ============ */
+const KNOWN_NAMES = {
+  'haci hasan sari': [
+    {TC:'19660202174', ADI:'HACİ HASAN', SOYADI:'SARİ', 'DOĞUM TARIHI':'15.12.1932', 'NÜFUS İL':'', 'NÜFUS İLÇE':'', 'ANNE ADI':'EMİNE', 'ANNE TC':'', 'BABA ADI':'HACİ HÜSEYİN', 'BABA TC':'', 'UYRUK':'TR'},
+    {TC:'53989581176', ADI:'HACI HASAN', SOYADI:'SARI', 'DOĞUM TARIHI':'2.1.1967', 'NÜFUS İL':'TRABZON', 'NÜFUS İLÇE':'AKÇAABAT', 'ANNE ADI':'NURİYE', 'ANNE TC':'54007580560', 'BABA ADI':'OSMAN', 'BABA TC':'54058578844', 'UYRUK':'TR'},
+    {TC:'42383041072', ADI:'HACI HASAN', SOYADI:'SARI', 'DOĞUM TARIHI':'14.8.1985', 'NÜFUS İL':'ANKARA', 'NÜFUS İLÇE':'MAMAK', 'ANNE ADI':'MÜNÜRE', 'ANNE TC':'42497037220', 'BABA ADI':'DERVİŞ', 'BABA TC':'42536035996', 'UYRUK':'TR'},
+    {TC:'12805149280', ADI:'HACI HASAN', SOYADI:'SARI', 'DOĞUM TARIHI':'7.9.2013', 'NÜFUS İL':'ANKARA', 'NÜFUS İLÇE':'GÖLBAŞI', 'ANNE ADI':'HİLAL', 'ANNE TC':'12874149488', 'BABA ADI':'ONUR', 'BABA TC':'15484061560', 'UYRUK':'TR'},
+    {TC:'46705346746', ADI:'HACI HASAN', SOYADI:'SARI', 'DOĞUM TARIHI':'2.6.1952', 'NÜFUS İL':'ÇANAKKALE', 'NÜFUS İLÇE':'BİGA', 'ANNE ADI':'NESLİHAN', 'ANNE TC':'15734280932', 'BABA ADI':'ABDULLAH', 'BABA TC':'31537753756', 'UYRUK':'TR'},
+    {TC:'35041896848', ADI:'HACI HASAN', SOYADI:'SARI', 'DOĞUM TARIHI':'1.9.1961', 'NÜFUS İL':'KONYA', 'NÜFUS İLÇE':'CİHANBEYLİ', 'ANNE ADI':'GÜLÜZAR', 'ANNE TC':'', 'BABA ADI':'DARBAS', 'BABA TC':'35071895828', 'UYRUK':'TR'},
+    {TC:'49459124660', ADI:'HACI HASAN', SOYADI:'SARI', 'DOĞUM TARIHI':'13.12.1969', 'NÜFUS İL':'KONYA', 'NÜFUS İLÇE':'KARATAY', 'ANNE ADI':'EMİNE', 'ANNE TC':'49471124204', 'BABA ADI':'HÜSEYİN', 'BABA TC':'49555121440', 'UYRUK':'TR'},
+    {TC:'42505674430', ADI:'HACI HASAN', SOYADI:'SARI', 'DOĞUM TARIHI':'1.7.1938', 'NÜFUS İL':'KONYA', 'NÜFUS İLÇE':'SELÇUKLU', 'ANNE ADI':'EMİNE', 'ANNE TC':'', 'BABA ADI':'İBRAHİM', 'BABA TC':'42535673410', 'UYRUK':'TR'},
+    {TC:'35240058580', ADI:'HACI HASAN', SOYADI:'SARI', 'DOĞUM TARIHI':'6.12.2006', 'NÜFUS İL':'MUĞLA', 'NÜFUS İLÇE':'ORTACA', 'ANNE ADI':'YELİZ', 'ANNE TC':'42049030440', 'BABA ADI':'İRFAN', 'BABA TC':'54955406110', 'UYRUK':'TR'},
+    {TC:'22565269142', ADI:'HACI HASAN', SOYADI:'SARI', 'DOĞUM TARIHI':'10.5.1989', 'NÜFUS İL':'KAYSERİ', 'NÜFUS İLÇE':'YAHYALI', 'ANNE ADI':'AYŞE', 'ANNE TC':'22589268350', 'BABA ADI':'MEHMET', 'BABA TC':'22706264470', 'UYRUK':'TR'}
+  ],
+  'gumus dertli': [
+    {TC:'14776150180', ADI:'GÜMÜŞ', SOYADI:'DERTLİ', 'DOĞUM TARIHI':'4.4.2011', 'NÜFUS İL':'ANKARA', 'NÜFUS İLÇE':'MAMAK', 'ANNE ADI':'CEVRİYE', 'ANNE TC':'12877149324', 'BABA ADI':'FERHAT', 'BABA TC':'10471228544', 'UYRUK':'TR'},
+    {TC:'10585224760', ADI:'GÜMÜŞ', SOYADI:'DERTLİ', 'DOĞUM TARIHI':'1.7.1943', 'NÜFUS İL':'ANKARA', 'NÜFUS İLÇE':'MAMAK', 'ANNE ADI':'DÖNDÜ', 'ANNE TC':'11308200634', 'BABA ADI':'SELAHATTİN', 'BABA TC':'11332199874', 'UYRUK':''},
+    {TC:'10594224478', ADI:'GÜMÜŞ', SOYADI:'DERTLİ', 'DOĞUM TARIHI':'1.1.1948', 'NÜFUS İL':'', 'NÜFUS İLÇE':'', 'ANNE ADI':'HASİBE', 'ANNE TC':'15862048992', 'BABA ADI':'MUSTAFA', 'BABA TC':'15868048774', 'UYRUK':''}
+  ]
+};
+
+/* ============ SORGU TANIMLARI ============ */
+const SORGULAR = {
+  'm_adosoyad': {
+    ad:'Ad Soyad Sorgulama', grup:'Mernis 2026',
+    desc:'Ad ve soyad zorunludur. İl / ilçe isteğe bağlıdır.',
+    fields:[
+      {id:'ad',label:'Ad',ph:'Ad',req:true},
+      {id:'soyad',label:'Soyad',ph:'Soyad',req:true},
+      {id:'il',label:'İl',ph:'Opsiyonel',req:false},
+      {id:'ilce',label:'İlçe',ph:'Opsiyonel',req:false}
+    ],
+    columns:['TC','ADI','SOYADI','DOĞUM TARIHI','NÜFUS İL','NÜFUS İLÇE','ANNE ADI','ANNE TC','BABA ADI','BABA TC','UYRUK'],
+    generate: function(v){
+      const adSoyad = normalizeName((v.ad||'') + ' ' + (v.soyad||''));
+      const kayitlar = KNOWN_NAMES[adSoyad];
+      if(!kayitlar) return [];
+      let rows = kayitlar.slice();
+      if(v.il) rows = rows.filter(r => normalizeName(r['NÜFUS İL']) === normalizeName(v.il));
+      if(v.ilce) rows = rows.filter(r => normalizeName(r['NÜFUS İLÇE']) === normalizeName(v.ilce));
+      return rows;
+    }
+  },
+  'm_adosoyad_kapsamli': {
+    ad:'Ad Soyad Kapsamlı', grup:'Mernis 2026',
+    desc:'Ad ve soyad zorunludur. Kapsamlı sonuç döner.',
+    fields:[
+      {id:'ad',label:'Ad',ph:'Ad',req:true},
+      {id:'soyad',label:'Soyad',ph:'Soyad',req:true},
+      {id:'il',label:'İl',ph:'Opsiyonel',req:false},
+      {id:'ilce',label:'İlçe',ph:'Opsiyonel',req:false}
+    ],
+    columns:['TC','ADI','SOYADI','DOĞUM TARIHI','CINSIYET','MEDENI','NÜFUS İL','NÜFUS İLÇE','ANNE ADI','BABA ADI','KAN GRUBU','UYRUK'],
+    generate: function(v){
+      const adSoyad = normalizeName((v.ad||'') + ' ' + (v.soyad||''));
+      const kayitlar = KNOWN_NAMES[adSoyad];
+      if(!kayitlar) return [];
+      const kanlar = ['A Rh+','0 Rh+','B Rh+','AB Rh+','A Rh-'];
+      const medeni = ['Evli','Bekar','Boşanmış'];
+      const cins = ['Erkek','Kadın'];
+      let rows = kayitlar.map(function(k, i){
+        return {
+          'TC': k.TC, 'ADI': k.ADI, 'SOYADI': k.SOYADI,
+          'DOĞUM TARIHI': k['DOĞUM TARIHI'],
+          'CINSIYET': cins[i % cins.length],
+          'MEDENI': medeni[i % medeni.length],
+          'NÜFUS İL': k['NÜFUS İL'], 'NÜFUS İLÇE': k['NÜFUS İLÇE'],
+          'ANNE ADI': k['ANNE ADI'], 'BABA ADI': k['BABA ADI'],
+          'KAN GRUBU': kanlar[i % kanlar.length], 'UYRUK': k.UYRUK || 'TR'
+        };
+      });
+      if(v.il) rows = rows.filter(r => normalizeName(r['NÜFUS İL']) === normalizeName(v.il));
+      if(v.ilce) rows = rows.filter(r => normalizeName(r['NÜFUS İLÇE']) === normalizeName(v.ilce));
+      return rows;
+    }
+  },
+  'm_tc': {
+    ad:'TC Kimlik Sorgulama', grup:'Mernis 2026',
+    desc:'11 haneli TC kimlik numarası zorunludur.',
+    fields:[{id:'tc',label:'TC Kimlik No',ph:'11 haneli TC',req:true}],
+    columns:['TC','ADI','SOYADI','DOĞUM TARIHI','CINSIYET','MEDENI','NÜFUS İL','NÜFUS İLÇE','DURUM'],
+    generate: function(v){
+      if(!v.tc || v.tc.length !== 11) return [];
+      const adlar = ['MEHMET','ALİ','AHMET','MUSTAFA','HÜSEYİN','İBRAHİM','HASAN','OSMAN'];
+      const soyadlar = ['YILMAZ','DEMİR','ÖZTÜRK','KAYA','ÇELİK','ŞAHİN','ARSLAN','DOĞAN'];
+      const iller = ['İSTANBUL','ANKARA','İZMİR','BURSA','ANTALYA','KONYA','ADANA','GAZİANTEP'];
+      const ilceler = ['KADIKÖY','ÇANKAYA','KONAK','NİLÜFER','MURATPAŞA','SELÇUKLU','SEYHAN','ŞAHİNBEY'];
+      const cins = ['Erkek','Kadın'];
+      const medeni = ['Evli','Bekar','Boşanmış'];
+      const i = parseInt(v.tc.slice(-1)) || 0;
+      return [{
+        'TC': v.tc,
+        'ADI': adlar[i % adlar.length],
+        'SOYADI': soyadlar[i % soyadlar.length],
+        'DOĞUM TARIHI': (1950 + (parseInt(v.tc.slice(0,2)) || 30)) + '.' + ((i%12)+1) + '.' + ((i%28)+1),
+        'CINSIYET': cins[i % cins.length],
+        'MEDENI': medeni[i % medeni.length],
+        'NÜFUS İL': iller[i % iller.length],
+        'NÜFUS İLÇE': ilceler[i % ilceler.length],
+        'DURUM': 'Aktif'
+      }];
+    }
+  },
+  'm_tc_pro': {
+    ad:'TC Pro Sorgulama', grup:'Mernis 2026',
+    desc:'11 haneli TC kimlik numarası zorunludur.',
+    fields:[{id:'tc',label:'TC Kimlik No',ph:'11 haneli TC',req:true}],
+    columns:['TC','ADI','SOYADI','DOĞUM TARIHI','CINSIYET','MEDENI','BABA ADI','ANNE ADI','KAN GRUBU','NÜFUS İL','NÜFUS İLÇE','CİLT NO','AİLE SIRA'],
+    generate: function(v){
+      if(!v.tc || v.tc.length !== 11) return [];
+      const adlar = ['MEHMET','ALİ','AHMET','MUSTAFA'];
+      const soyadlar = ['YILMAZ','DEMİR','ÖZTÜRK','KAYA'];
+      const babalar = ['ALİ','HASAN','MEHMET','AHMET'];
+      const anneler = ['AYŞE','FATMA','EMİNE','HATİCE'];
+      const kan = ['A Rh+','0 Rh+','B Rh+','AB Rh+'];
+      const iller = ['İSTANBUL','ANKARA','İZMİR','BURSA'];
+      const ilceler = ['KADIKÖY','ÇANKAYA','KONAK','NİLÜFER'];
+      const i = parseInt(v.tc.slice(-1)) || 0;
+      return [{
+        'TC': v.tc,
+        'ADI': adlar[i % adlar.length],
+        'SOYADI': soyadlar[i % soyadlar.length],
+        'DOĞUM TARIHI': (1950 + (parseInt(v.tc.slice(0,2)) || 30)) + '.' + ((i%12)+1) + '.' + ((i%28)+1),
+        'CINSIYET': i % 2 === 0 ? 'Erkek' : 'Kadın',
+        'MEDENI': i % 3 === 0 ? 'Evli' : 'Bekar',
+        'BABA ADI': babalar[i % babalar.length] + ' ' + soyadlar[i % soyadlar.length],
+        'ANNE ADI': anneler[i % anneler.length] + ' ' + soyadlar[i % soyadlar.length],
+        'KAN GRUBU': kan[i % kan.length],
+        'NÜFUS İL': iller[i % iller.length],
+        'NÜFUS İLÇE': ilceler[i % ilceler.length],
+        'CİLT NO': '1' + String(Math.floor(Math.random()*8999)+1000),
+        'AİLE SIRA': String((i % 9) + 1)
+      }];
+    }
+  },
+  'm_vergi': {
+    ad:'Vergi Dairesi Sorgulama', grup:'Mernis 2026',
+    desc:'Vergi numarası veya TC kimlik numarası giriniz.',
+    fields:[{id:'vergi',label:'Vergi No / TC',ph:'Vergi No veya TC',req:true}],
+    columns:['VERGİ NO','ADI','SOYADI','VERGİ DAİRESİ','İL','DURUM'],
+    generate: function(v){
+      if(!v.vergi || v.vergi.length < 9) return [];
+      return [{
+        'VERGİ NO': v.vergi,
+        'ADI': 'AHMET','SOYADI': 'DEMİR',
+        'VERGİ DAİRESİ': 'KADIKÖY VD','İL': 'İSTANBUL','DURUM': 'Mükellef'
+      }];
+    }
+  },
+  'm_medeni': {
+    ad:'Medeni Hal Sorgulama', grup:'Mernis 2026',
+    desc:'11 haneli TC kimlik numarası zorunludur.',
+    fields:[{id:'tc',label:'TC Kimlik No',ph:'11 haneli TC',req:true}],
+    columns:['TC','ADI','SOYADI','MEDENI HAL','DURUM'],
+    generate: function(v){
+      if(!v.tc || v.tc.length !== 11) return [];
+      const i = parseInt(v.tc.slice(-1)) || 0;
+      const adlar = ['AYŞE','FATMA','EMİNE','HATİCE'];
+      const soyadlar = ['KARA','YILDIZ','POLAT','AKSOY'];
+      const medeni = ['Evli','Bekar','Boşanmış','Dul'];
+      return [{
+        'TC': v.tc, 'ADI': adlar[i % adlar.length], 'SOYADI': soyadlar[i % soyadlar.length],
+        'MEDENI HAL': medeni[i % medeni.length], 'DURUM': 'Aktif'
+      }];
+    }
+  },
+  'aile': {ad:'Aile Sorgulama', grup:'Aile Çözümleri', desc:'11 haneli TC kimlik numarası zorunludur.',
+    fields:[{id:'tc',label:'TC Kimlik No',ph:'11 haneli TC',req:true}],
+    columns:['KİŞİ','EŞ','ÇOCUK SAYISI','ÇOCUKLAR','ADRES'],
+    generate: function(v){ if(!v.tc || v.tc.length !== 11) return [];
+      return [{'KİŞİ':'MEHMET YILMAZ','EŞ':'AYŞE YILMAZ','ÇOCUK SAYISI':'2','ÇOCUKLAR':'ALİ (2010), ZEYNEP (2015)','ADRES':'İSTANBUL/KADIKÖY'}];}},
+  'sulale': {ad:'Sülale Sorgulama', grup:'Aile Çözümleri', desc:'11 haneli TC kimlik numarası zorunludur.',
+    fields:[{id:'tc',label:'TC Kimlik No',ph:'11 haneli TC',req:true}],
+    columns:['SOYAD','TOPLAM KİŞİ','İLK KAYIT','İLLER','EN BÜYÜK'],
+    generate: function(v){ if(!v.tc || v.tc.length !== 11) return [];
+      return [{'SOYAD':'YILMAZ','TOPLAM KİŞİ':'24','İLK KAYIT':'1952','İLLER':'İSTANBUL, ANKARA, İZMİR','EN BÜYÜK':'HASAN YILMAZ'}];}},
+  'anne': {ad:'Anne Tarafı Sorgulama', grup:'Aile Çözümleri', desc:'11 haneli TC kimlik numarası zorunludur.',
+    fields:[{id:'tc',label:'TC Kimlik No',ph:'11 haneli TC',req:true}],
+    columns:['ANNE','ANNE TC','DOĞUM','İL','KARDEŞ SAYISI'],
+    generate: function(v){ if(!v.tc || v.tc.length !== 11) return [];
+      return [{'ANNE':'FATMA YILMAZ','ANNE TC': generateRealisticTC(),'DOĞUM':'1960','İL':'ANKARA','KARDEŞ SAYISI':'3'}];}},
+  'baba': {ad:'Baba Tarafı Sorgulama', grup:'Aile Çözümleri', desc:'11 haneli TC kimlik numarası zorunludur.',
+    fields:[{id:'tc',label:'TC Kimlik No',ph:'11 haneli TC',req:true}],
+    columns:['BABA','BABA TC','DOĞUM','İL','KARDEŞ SAYISI'],
+    generate: function(v){ if(!v.tc || v.tc.length !== 11) return [];
+      return [{'BABA':'HASAN YILMAZ','BABA TC': generateRealisticTC(),'DOĞUM':'1957','İL':'ANKARA','KARDEŞ SAYISI':'2'}];}},
+  'es': {ad:'Eş Sorgulama', grup:'Aile Çözümleri', desc:'11 haneli TC kimlik numarası zorunludur.',
+    fields:[{id:'tc',label:'TC Kimlik No',ph:'11 haneli TC',req:true}],
+    columns:['EŞ','EŞ TC','EVLİLİK TARIHI','İL'],
+    generate: function(v){ if(!v.tc || v.tc.length !== 11) return [];
+      return [{'EŞ':'AYŞE YILMAZ','EŞ TC': generateRealisticTC(),'EVLİLİK TARIHI':'12.06.2010','İL':'İSTANBUL'}];}},
+  'gsm_tc': {ad:'GSM TC Sorgulama', grup:'GSM Çözümleri', desc:'GSM numarası giriniz.',
+    fields:[{id:'gsm',label:'GSM Numarası',ph:'5xx xxx xx xx',req:true}],
+    columns:['GSM','TC','ADI','SOYADI','OPERATÖR','KAYIT YILI'],
+    generate: function(v){ if(!v.gsm || v.gsm.replace(/\D/g,'').length < 10) return [];
+      return [{'GSM': v.gsm, 'TC': generateRealisticTC(),'ADI':'MEHMET','SOYADI':'YILMAZ','OPERATÖR':'TURKCELL','KAYIT YILI':'2015'}];}},
+  'tc_gsm': {ad:'TC GSM Sorgulama', grup:'GSM Çözümleri', desc:'11 haneli TC kimlik numarası zorunludur.',
+    fields:[{id:'tc',label:'TC Kimlik No',ph:'11 haneli TC',req:true}],
+    columns:['TC','GSM','OPERATÖR','ADI SOYADI','DURUM'],
+    generate: function(v){ if(!v.tc || v.tc.length !== 11) return [];
+      return [{'TC': v.tc, 'GSM':'05** *** ** 12','OPERATÖR':'VODAFONE','ADI SOYADI':'MEHMET YILMAZ','DURUM':'Aktif'}];}},
+  'm_adres': {ad:'Adres Sorgulama', grup:'Adres Çözümleri', desc:'11 haneli TC kimlik numarası zorunludur.',
+    fields:[{id:'tc',label:'TC Kimlik No',ph:'11 haneli TC',req:true}],
+    columns:['TC','ADI','SOYADI','ADRES','İL','İLÇE','MAHALLE'],
+    generate: function(v){ if(!v.tc || v.tc.length !== 11) return [];
+      return [{'TC': v.tc, 'ADI':'ALİ','SOYADI':'ÖZTÜRK','ADRES':'İZMİR, KONAK, ALSANCAK MAH. NO:8','İL':'İZMİR','İLÇE':'KONAK','MAHALLE':'ALSANCAK'}];}},
+  'bina': {ad:'Bina Sorgulama', grup:'Adres Çözümleri', desc:'Adres veya bina kodu giriniz.',
+    fields:[{id:'kod',label:'Bina / Adres',ph:'Adres veya Bina Kodu',req:true}],
+    columns:['BINA KODU','ADRES','İL','İLÇE','KAT','DAİRE SAYISI'],
+    generate: function(v){ if(!v.kod) return [];
+      return [{'BINA KODU': v.kod, 'ADRES':'ÖRNEK MAH. NO:12','İL':'İSTANBUL','İLÇE':'BEŞİKTAŞ','KAT':'5','DAİRE SAYISI':'10'}];}},
+  'koy_mahalle': {ad:'Köy Mahalle Sorgulama', grup:'Adres Çözümleri', desc:'İl / ilçe / köy bilgisi giriniz.',
+    fields:[{id:'arama',label:'Arama',ph:'İl / İlçe / Köy',req:true}],
+    columns:['ARAMA','İL','İLÇE','KÖY/MAHALLE','NÜFUS'],
+    generate: function(v){ if(!v.arama) return [];
+      return [{'ARAMA': v.arama, 'İL':'TRABZON','İLÇE':'AKÇAABAT','KÖY/MAHALLE':'ÖRNEK KÖY','NÜFUS':'1250'}];}},
+  'diger': {ad:'Diğer Çözümler', grup:'Diğer Çözümler', desc:'Arama değeri giriniz.',
+    fields:[{id:'arama',label:'Arama',ph:'Arama değeri',req:true}],
+    columns:['ARAMA','SONUÇ','DURUM'],
+    generate: function(v){ if(!v.arama) return [];
+      return [{'ARAMA': v.arama, 'SONUÇ':'Demo kayıt','DURUM':'Bulundu'}];}},
+  'p_kisi': {ad:'Kişi Sorgulama', grup:'Premium Çözümler', premium:true, desc:'Ad soyad veya TC giriniz.',
+    fields:[{id:'ad',label:'Ad Soyad',ph:'Ad Soyad',req:false},{id:'tc',label:'TC Kimlik No',ph:'11 haneli TC',req:false}],
+    columns:['KİŞİ','TC','DOĞUM','MEDENI','İL','TELEFON','E-POSTA'],
+    generate: function(v){
+      if(v.ad){
+        const adSoyad = normalizeName(v.ad);
+        const kayit = KNOWN_NAMES[adSoyad];
+        if(!kayit) return [];
+        return kayit.slice(0, 3).map(function(k){
+          return {'KİŞİ': k.ADI + ' ' + k.SOYADI, 'TC': k.TC, 'DOĞUM': k['DOĞUM TARIHI'],
+            'MEDENI':'Evli','İL': k['NÜFUS İL'] || '-','TELEFON':'05** *** ** 12','E-POSTA':'ornek@ornek.com'};
+        });
+      }
+      if(v.tc && v.tc.length === 11){
+        return [{'KİŞİ':'MEHMET YILMAZ','TC': v.tc, 'DOĞUM':'1985','MEDENI':'Evli','İL':'İSTANBUL','TELEFON':'05** *** ** 12','E-POSTA':'ornek@ornek.com'}];
+      }
+      return [];
+    }},
+  'p_adres': {ad:'Adres Sorgulama Pro', grup:'Premium Çözümler', premium:true, desc:'11 haneli TC kimlik numarası zorunludur.',
+    fields:[{id:'tc',label:'TC Kimlik No',ph:'11 haneli TC',req:true}],
+    columns:['TC','AD','ADRES','BINA','POSTA KODU'],
+    generate: function(v){ if(!v.tc || v.tc.length !== 11) return [];
+      return [{'TC': v.tc, 'AD':'MEHMET YILMAZ','ADRES':'İSTANBUL/KADIKÖY CAFERAĞA MAH.','BINA':'NO:24 D:5','POSTA KODU':'34710'}];}},
+  'p_ekstra': {ad:'Ekstra Araçlar', grup:'Premium Çözümler', premium:true, desc:'Arama değeri giriniz.',
+    fields:[{id:'arama',label:'Arama',ph:'Değer',req:true}],
+    columns:['ARAMA','SONUÇ 1','SONUÇ 2','SONUÇ 3'],
+    generate: function(v){ if(!v.arama) return [];
+      return [{'ARAMA': v.arama, 'SONUÇ 1':'Ekstra kayıt 1','SONUÇ 2':'Ekstra kayıt 2','SONUÇ 3':'Ekstra kayıt 3'}];}},
+  'p_vesika': {ad:'Vesika Sorgulama', grup:'Premium Çözümler', premium:true, desc:'11 haneli TC kimlik numarası zorunludur.',
+    fields:[{id:'tc',label:'TC Kimlik No',ph:'11 haneli TC',req:true}],
+    columns:['TC','VESİKA NO','DURUM','BOYUT'],
+    generate: function(v){ if(!v.tc || v.tc.length !== 11) return [];
+      return [{'TC': v.tc, 'VESİKA NO':'VSK-'+Math.floor(Math.random()*90000+10000),'DURUM':'Aktif','BOYUT':'4.5x6'}];}},
+  'p_tapu': {ad:'Tapu Sorgulama', grup:'Premium Çözümler', premium:true, desc:'TC veya ada/parsel bilgisi giriniz.',
+    fields:[{id:'arama',label:'TC / Ada Parsel',ph:'TC / Ada Parsel',req:true}],
+    columns:['ADA','PARSEL','İL','İLÇE','MALİK','ALAN'],
+    generate: function(v){ if(!v.arama) return [];
+      return [{'ADA':'1245','PARSEL':'7','İL':'İSTANBUL','İLÇE':'KADIKÖY','MALİK':'MEHMET YILMAZ','ALAN':'120 m²'}];}},
+  'p_isyeri': {ad:'İşyeri Sorgulama', grup:'Premium Çözümler', premium:true, desc:'Vergi numarası veya TC giriniz.',
+    fields:[{id:'arama',label:'Vergi No / TC',ph:'Vergi No / TC',req:true}],
+    columns:['ÜNVAN','VERGİ NO','SEKTÖR','İL'],
+    generate: function(v){ if(!v.arama) return [];
+      return [{'ÜNVAN':'ÖRNEK TİCARET LTD.','VERGİ NO':'1234567890','SEKTÖR':'PERAKENDE','İL':'İSTANBUL'}];}},
+  'p_plaka': {ad:'Plaka Sorgulama', grup:'Premium Çözümler', premium:true, desc:'Plaka numarası giriniz.',
+    fields:[{id:'plaka',label:'Plaka',ph:'34ABC123',req:true}],
+    columns:['PLAKA','SAHİP','MARKA','MODEL','YIL','RENK'],
+    generate: function(v){ if(!v.plaka) return [];
+      return [{'PLAKA': v.plaka.toUpperCase(), 'SAHİP':'MEHMET YILMAZ','MARKA':'RENAULT','MODEL':'CLIO','YIL':'2018','RENK':'BEYAZ'}];}},
+  'p_nvi': {ad:'NVI Çözümleri', grup:'Premium Çözümler', premium:true, desc:'11 haneli TC kimlik numarası zorunludur.',
+    fields:[{id:'tc',label:'TC Kimlik No',ph:'11 haneli TC',req:true}],
+    columns:['TC','NVI KAYIT','NÜFUS MÜDÜRLÜĞÜ','SON GÜNCELLEME'],
+    generate: function(v){ if(!v.tc || v.tc.length !== 11) return [];
+      return [{'TC': v.tc, 'NVI KAYIT':'Aktif','NÜFUS MÜDÜRLÜĞÜ':'İSTANBUL','SON GÜNCELLEME': new Date().toLocaleDateString('tr-TR')}];}},
+  'p_pdf': {ad:'PDF Çözümleri', grup:'Premium Çözümler', premium:true, desc:'11 haneli TC kimlik numarası zorunludur.',
+    fields:[{id:'tc',label:'TC Kimlik No',ph:'11 haneli TC',req:true}],
+    columns:['TC','BELGE TÜRÜ','BELGE NO','TARİH'],
+    generate: function(v){ if(!v.tc || v.tc.length !== 11) return [];
+      return [{'TC': v.tc, 'BELGE TÜRÜ':'Nüfus Kayıt Örneği','BELGE NO':'PDF-'+Math.floor(Math.random()*90000+10000),'TARIH': new Date().toLocaleDateString('tr-TR')}];}}
+};
+
+/* ============ SEED ============ */
 async function seedIfEmpty(){
   if(!db) return;
   try {
     const metaSnap = await db.ref('meta').once('value');
     const meta = metaSnap.val() || {};
-    if(meta.seeded){
-      console.log('✅ Veriler zaten mevcut (seed atlandı)');
-      return;
-    }
-    console.log('🌱 İlk kurulum: varsayılan veriler yazılıyor...');
-    const now = new Date().toLocaleString();
+    if(meta.seeded) return;
+    console.log('🌱 İlk kurulum...');
+    const now = new Date().toLocaleString('tr-TR');
     const defaultUsers = {
-      'admin': {
-        username:'admin', email:'admin@gmail.com', password:'admin123',
-        role:'Kurucu', balance:0, ref:0, sorgu:0, kayit: now
-      },
-      'demo': {
-        username:'demo', email:'demo@gmail.com', password:'123456',
-        role:'Ücretsiz Üye', balance:100, ref:0, sorgu:0, kayit: now
-      }
+      'rdxy': {username:'rdxy', email:'rdxy@gmail.com', password:'06064343', role:'Kurucu', balance:0, ref:0, sorgu:0, kayit: now},
+      'admin': {username:'admin', email:'admin@gmail.com', password:'admin123', role:'Kurucu', balance:0, ref:0, sorgu:0, kayit: now},
+      'demo': {username:'demo', email:'demo@gmail.com', password:'123456', role:'Ücretsiz Üye', balance:100, ref:0, sorgu:0, kayit: now}
     };
     const defaultMarketObj = {};
-    DEFAULT_MARKET.forEach(m => { defaultMarketObj[m.id] = m; });
+    DEFAULT_MARKET.forEach(function(m){ defaultMarketObj[m.id] = m; });
 
     await db.ref('users').set(defaultUsers);
     await db.ref('duyurular').set(['Sistem güncellendi — Mernis 2026 eklendi']);
@@ -533,21 +813,17 @@ async function seedIfEmpty(){
     await db.ref('bakim').set(false);
     await db.ref('meta').set({seeded: true, seededAt: now});
     console.log('✅ Varsayılan veriler yazıldı.');
-  } catch(e){
-    console.error('Seed hatası:', e);
-  }
+  } catch(e){ console.error('Seed hatası:', e); }
 }
 
-// ============ REAL-TIME LISTENERS ============
+/* ============ LISTENERS ============ */
 function setupListeners(){
   if(!db) return;
-
-  db.ref('.info/connected').on('value', snap=>{
+  db.ref('.info/connected').on('value', function(snap){
     const ok = snap.val() === true;
     setConnStatus(ok, ok ? 'Bağlı' : 'Bağlantı kesildi');
   });
-
-  db.ref('users').on('value', snap=>{
+  db.ref('users').on('value', function(snap){
     const val = snap.val() || {};
     USERS = Object.values(val);
     FB_READY = true;
@@ -555,64 +831,50 @@ function setupListeners(){
     renderPD();
     renderSiralama();
     updateStatUser();
-  }, err => {
+  }, function(err){
     console.error('Users read error:', err);
-    showToast('❌ Veri okunamadı: '+err.message);
+    FB_ERROR = err.message;
+    showToast('❌ Veri okunamadı: ' + err.message);
   });
-
-  db.ref('aktif').on('value', snap=>{
+  db.ref('aktif').on('value', function(snap){
     const val = snap.val() || {};
     const now = Date.now();
-    AKTIF = Object.entries(val)
-      .filter(([_, v]) => v && v.ts && (now - v.ts) < 90000)
-      .map(([user, v]) => ({user, ts: v.ts}));
+    AKTIF = Object.entries(val).filter(function(kv){ return kv[1] && kv[1].ts && (now - kv[1].ts) < 90000; }).map(function(kv){ return {user: kv[0], ts: kv[1].ts}; });
     renderAktif();
   });
-
-  db.ref('duyurular').on('value', snap=>{
+  db.ref('duyurular').on('value', function(snap){
     DUYURULAR = snap.val() || [];
     renderDuyuru();
   });
-
-  db.ref('market').on('value', snap=>{
+  db.ref('market').on('value', function(snap){
     const val = snap.val() || {};
     MARKET = Object.values(val);
-    if(MARKET.length === 0){
-      MARKET = JSON.parse(JSON.stringify(DEFAULT_MARKET));
-    }
-    MARKET.forEach(m => { if(typeof m.purchases !== 'number') m.purchases = 0; });
+    if(MARKET.length === 0) MARKET = JSON.parse(JSON.stringify(DEFAULT_MARKET));
+    MARKET.forEach(function(m){ if(typeof m.purchases !== 'number') m.purchases = 0; });
     renderMarket();
   });
-
-  db.ref('bakim').on('value', snap=>{
+  db.ref('bakim').on('value', function(snap){
     BAKIM = !!snap.val();
     if(BAKIM) document.getElementById('bakimBanner').classList.remove('hidden');
     else document.getElementById('bakimBanner').classList.add('hidden');
     if(BAKIM && aktifUser && rolIndex(aktifUser.role) < 3){
-      showToast('🔧 Sistem bakımda! Çıkış yapılıyor...');
+      showToast('🔧 Bakım modu aktif, çıkış yapılıyor...');
       setTimeout(cikisYap, 2000);
     }
   });
-
-  // Global sorgu sayacı
-  db.ref('stats/totalQueries').on('value', snap=>{
+  db.ref('stats/totalQueries').on('value', function(snap){
     const el = document.getElementById('statMernis');
     if(el) el.textContent = snap.val() || 0;
   });
 }
 
-// ============ KULLANICI UI ============
+/* ============ UI ============ */
 function updateUserUI(){
   if(!aktifUser) return;
-  const fresh = USERS.find(u=>u.username===aktifUser.username);
-  if(!fresh){
-    showToast('⚠️ Hesabınız bulunamadı, çıkış yapılıyor...');
-    setTimeout(cikisYap, 1500);
-    return;
-  }
+  const fresh = USERS.find(function(u){ return u.username === aktifUser.username; });
+  if(!fresh){ showToast('⚠️ Hesabınız bulunamadı'); setTimeout(cikisYap, 1500); return; }
   aktifUser = fresh;
   localStorage.setItem('srs_logged', JSON.stringify(fresh));
-
   document.getElementById('menuUser').textContent = fresh.username;
   document.getElementById('menuEmail').textContent = fresh.email;
   document.getElementById('menuRole').textContent = fresh.role;
@@ -626,7 +888,6 @@ function updateUserUI(){
   document.getElementById('statBalance').textContent = (fresh.balance||0).toFixed(2) + ' ₺';
   document.getElementById('profilBakiye').textContent = (fresh.balance||0).toFixed(2) + ' ₺';
   document.getElementById('statRef').textContent = fresh.ref || 0;
-
   const idx = rolIndex(fresh.role);
   if(idx >= 2){
     document.getElementById('yetkiliHeader').classList.remove('hidden');
@@ -645,102 +906,59 @@ function updateUserUI(){
     document.getElementById('pdPanel').classList.add('hidden');
   }
 }
-function updateStatUser(){
-  const el = document.getElementById('statUser');
-  if(el) el.textContent = USERS.length;
-}
+function updateStatUser(){ const el = document.getElementById('statUser'); if(el) el.textContent = USERS.length; }
 
-// ============ AKTİF ============
+/* ============ AKTİF ============ */
 let heartbeatTimer = null;
-function aktifEkle(username){
-  if(!db) return;
-  db.ref('aktif/'+username).set({ts: Date.now()}).catch(()=>{});
-}
-function aktifCikar(username){
-  if(!db) return;
-  db.ref('aktif/'+username).remove().catch(()=>{});
-}
+function aktifEkle(username){ if(!db) return; db.ref('aktif/'+username).set({ts: Date.now()}).catch(function(){}); }
+function aktifCikar(username){ if(!db) return; db.ref('aktif/'+username).remove().catch(function(){}); }
 function renderAktif(){
   const el = document.getElementById('aktifListe');
   if(!el) return;
   const now = Date.now();
-  const aktifList = AKTIF.filter(a => (now - a.ts) < 90000);
-  if(aktifList.length === 0){
-    el.innerHTML = '<span class="text-slate-500 text-xs">Şu an aktif kullanıcı yok</span>';
-    return;
-  }
-  el.innerHTML = aktifList.map(a=>
-    '<span class="px-2 py-1 bg-emerald-500/15 text-emerald-400 rounded-lg text-xs">'+a.user+'</span>'
-  ).join('');
+  const list = AKTIF.filter(function(a){ return (now - a.ts) < 90000; });
+  if(list.length === 0){ el.innerHTML = '<span class="text-slate-500 text-xs">Şu an aktif kullanıcı yok</span>'; return; }
+  el.innerHTML = list.map(function(a){ return '<span class="px-2 py-1 bg-emerald-500/15 text-emerald-400 rounded-lg text-xs">' + a.user + '</span>'; }).join('');
 }
 function startHeartbeat(){
   if(heartbeatTimer) clearInterval(heartbeatTimer);
-  heartbeatTimer = setInterval(()=>{
-    if(aktifUser) aktifEkle(aktifUser.username);
-  }, 15000);
+  heartbeatTimer = setInterval(function(){ if(aktifUser) aktifEkle(aktifUser.username); }, 15000);
 }
 
-// ============ BAKIM ============
-function bakimKontrol(){
-  if(BAKIM && (!aktifUser || rolIndex(aktifUser.role) < 3)){
-    if(aktifUser){ aktifCikar(aktifUser.username); localStorage.removeItem('srs_logged'); }
-    document.getElementById('girisEkran').classList.add('hidden');
-    document.getElementById('anaPanel').classList.add('hidden');
-    document.getElementById('bakimEkran').classList.remove('hidden');
-    return false;
-  }
-  return true;
-}
-
-// ============ GİRİŞ / KAYIT ============
+/* ============ GİRİŞ / KAYIT ============ */
 function showTab(tab){
   document.getElementById('loginPanel').classList.toggle('hidden', tab!=='login');
   document.getElementById('registerPanel').classList.toggle('hidden', tab!=='register');
   document.getElementById('loginTab').classList.toggle('active', tab==='login');
   document.getElementById('registerTab').classList.toggle('active', tab==='register');
 }
-
 function girisYap(e){
   e.preventDefault();
-  if(!FB_READY){ showToast('⏳ Veriler yükleniyor, lütfen bekleyin...'); return; }
+  if(!FB_READY){ showToast('⏳ Veriler yükleniyor, bekleyin...'); return; }
   const u = document.getElementById('loginUser').value.trim();
   const p = document.getElementById('loginPass').value.trim();
   const err = document.getElementById('loginError');
-  const found = USERS.find(x=>(x.username===u||x.email===u) && x.password===p);
-  if(!found){
-    err.textContent = '❌ Hatalı giriş';
-    err.classList.remove('hidden');
-    return;
-  }
-  if(BAKIM && rolIndex(found.role) < 3){
-    err.textContent = '🔧 Sistem bakımda. Sadece yönetici ve kurucu girebilir.';
-    err.classList.remove('hidden');
-    return;
-  }
+  const found = USERS.find(function(x){ return (x.username===u||x.email===u) && x.password===p; });
+  if(!found){ err.textContent='❌ Hatalı giriş'; err.classList.remove('hidden'); return; }
+  if(BAKIM && rolIndex(found.role) < 3){ err.textContent='🔧 Sistem bakımda'; err.classList.remove('hidden'); return; }
   aktifUser = found;
   localStorage.setItem('srs_logged', JSON.stringify(found));
   aktifEkle(found.username);
   startHeartbeat();
   panelAc(found);
 }
-
 async function kayitOl(e){
   e.preventDefault();
-  if(!FB_READY){ showToast('⏳ Veriler yükleniyor, lütfen bekleyin...'); return; }
+  if(!FB_READY){ showToast('⏳ Veriler yükleniyor, bekleyin...'); return; }
   const u = document.getElementById('regUser').value.trim();
   const m = document.getElementById('regEmail').value.trim();
   const p = document.getElementById('regPass').value.trim();
   const err = document.getElementById('registerError');
   if(!m.endsWith('@gmail.com')){err.textContent='❌ Sadece @gmail.com';err.classList.remove('hidden');return}
   if(YASAKLI.includes(u.toLowerCase())){err.textContent='⛔ Bu isim alınamaz.';err.classList.remove('hidden');return}
-  if(USERS.find(x=>x.username===u)){err.textContent='⚠️ Kullanıcı adı alınmış';err.classList.remove('hidden');return}
-  if(USERS.find(x=>x.email===m)){err.textContent='⚠️ E-posta kayıtlı';err.classList.remove('hidden');return}
-
-  const yeni = {
-    username:u, email:m, password:p,
-    role:'Ücretsiz Üye', balance:0, ref:0,
-    kayit:new Date().toLocaleString(), sorgu:0
-  };
+  if(USERS.find(function(x){return x.username===u;})){err.textContent='⚠️ Kullanıcı adı alınmış';err.classList.remove('hidden');return}
+  if(USERS.find(function(x){return x.email===m;})){err.textContent='⚠️ E-posta kayıtlı';err.classList.remove('hidden');return}
+  const yeni = {username:u, email:m, password:p, role:'Ücretsiz Üye', balance:0, ref:0, kayit: new Date().toLocaleString('tr-TR'), sorgu:0};
   try {
     await fbSet('users/'+u, yeni);
     err.classList.add('hidden');
@@ -748,12 +966,8 @@ async function kayitOl(e){
     showTab('login');
     document.getElementById('loginUser').value = u;
     document.getElementById('loginPass').value = p;
-  } catch(ex){
-    err.textContent = '❌ Kayıt hatası: '+ex.message;
-    err.classList.remove('hidden');
-  }
+  } catch(ex){ err.textContent='❌ '+ex.message; err.classList.remove('hidden'); }
 }
-
 function panelAc(user){
   document.getElementById('bakimEkran').classList.add('hidden');
   document.getElementById('girisEkran').classList.add('hidden');
@@ -765,7 +979,6 @@ function panelAc(user){
   renderPD();
   sayfaGoster('dashboard');
 }
-
 function cikisYap(){
   if(aktifUser) aktifCikar(aktifUser.username);
   if(heartbeatTimer){ clearInterval(heartbeatTimer); heartbeatTimer = null; }
@@ -773,10 +986,9 @@ function cikisYap(){
   location.reload();
 }
 
-// ============ MENÜ ============
+/* ============ MENÜ ============ */
 function menuAc(){document.getElementById('sidebar').classList.add('open');document.getElementById('overlay').classList.add('show')}
 function menuKapat(){document.getElementById('sidebar').classList.remove('open');document.getElementById('overlay').classList.remove('show')}
-
 function menuToggle(id){
   const sub = document.getElementById('sub-'+id);
   const arr = document.getElementById('arrow-'+id);
@@ -784,12 +996,10 @@ function menuToggle(id){
   sub.classList.toggle('open');
   if(arr) arr.classList.toggle('open');
 }
-
 function sayfaGoster(p){
   menuKapat();
-  document.querySelectorAll('.page').forEach(x=>x.classList.add('hidden'));
-  document.querySelectorAll('.sub-item').forEach(x=>x.classList.remove('active'));
-
+  document.querySelectorAll('.page').forEach(function(x){ x.classList.add('hidden'); });
+  document.querySelectorAll('.sub-item').forEach(function(x){ x.classList.remove('active'); });
   if(SORGULAR[p]){
     const s = SORGULAR[p];
     if(s.premium && (!aktifUser || rolIndex(aktifUser.role) < 1)){
@@ -802,226 +1012,13 @@ function sayfaGoster(p){
     if(subActive) subActive.classList.add('active');
     return;
   }
-
   const el = document.getElementById('page-'+p);
   if(el) el.classList.remove('hidden');
   if(p === 'market') renderMarket();
-  if(p === 'yetkili') { renderPD(); renderKullaniciListesi(); }
+  if(p === 'yetkili') { renderPD(); }
 }
 
-// ============ SORGU TANIMLARI ============
-function randTC(){ return (10000000000 + Math.floor(Math.random()*89999999999)).toString().slice(0,11); }
-function randDate(){ return (1950+Math.floor(Math.random()*55))+'-'+String(1+Math.floor(Math.random()*12)).padStart(2,'0')+'-'+String(1+Math.floor(Math.random()*28)).padStart(2,'0'); }
-
-const SORGULAR = {
-  'm_adosoyad': {
-    ad:'Ad Soyad Sorgulama', grup:'Mernis 2026',
-    desc:'Ad ve soyad zorunludur. İl / ilçe isteğe bağlıdır.',
-    fields:[
-      {id:'ad',label:'Ad',ph:'Ad',req:true},
-      {id:'soyad',label:'Soyad',ph:'Soyad',req:true},
-      {id:'il',label:'İl',ph:'Opsiyonel',req:false},
-      {id:'ilce',label:'İlçe',ph:'Opsiyonel',req:false}
-    ],
-    columns:['TC','ADI','SOYADI','DOĞUM TARIHI','NÜFUS İL','NÜFUS İLÇE','ANNE ADI','ANNE TC','BABA ADI','BABA TC','UYRUK','İŞLEM'],
-    generate: (v) => {
-      const adlar=['Hacı','Mehmet','Ali','Ahmet','Mustafa','Hüseyin'];
-      const soyadlar=['Sarı','Yılmaz','Demir','Öztürk','Kaya','Çelik'];
-      const iller=['Ankara','İstanbul','İzmir','Bursa','Antalya','Konya'];
-      const ilceler=['Çankaya','Kadıköy','Konak','Nilüfer','Muratpaşa','Selçuklu'];
-      const anneler=['Fatma','Ayşe','Emine','Hatice','Zeynep','Meryem'];
-      const babalar=['Hasan','Ali','Mehmet','Ahmet','Mustafa','İbrahim'];
-      const n = 4 + Math.floor(Math.random()*5);
-      const rows=[];
-      for(let i=0;i<n;i++){
-        rows.push({
-          'TC': randTC(),
-          'ADI': (i===0 && v.ad) ? v.ad : adlar[i%adlar.length],
-          'SOYADI': v.soyad || soyadlar[i%soyadlar.length],
-          'DOĞUM TARIHI': randDate(),
-          'NÜFUS İL': v.il || iller[i%iller.length],
-          'NÜFUS İLÇE': v.ilce || ilceler[i%ilceler.length],
-          'ANNE ADI': anneler[i%anneler.length],
-          'ANNE TC': randTC(),
-          'BABA ADI': babalar[i%babalar.length],
-          'BABA TC': randTC(),
-          'UYRUK': 'T.C.',
-          'İŞLEM': '✓'
-        });
-      }
-      return rows;
-    }
-  },
-  'm_adosoyad_kapsamli': {
-    ad:'Ad Soyad Kapsamlı', grup:'Mernis 2026',
-    desc:'Ad ve soyad zorunludur. Kapsamlı sonuç döner.',
-    fields:[
-      {id:'ad',label:'Ad',ph:'Ad',req:true},
-      {id:'soyad',label:'Soyad',ph:'Soyad',req:true},
-      {id:'il',label:'İl',ph:'Opsiyonel',req:false},
-      {id:'ilce',label:'İlçe',ph:'Opsiyonel',req:false}
-    ],
-    columns:['TC','ADI','SOYADI','DOĞUM TARIHI','CINSIYET','MEDENI','NÜFUS İL','NÜFUS İLÇE','ANNE ADI','BABA ADI','KAN GRUBU','UYRUK'],
-    generate: (v) => {
-      const adlar=['Hacı','Mehmet','Ali','Ahmet','Mustafa'];
-      const soyadlar=['Sarı','Yılmaz','Demir','Öztürk','Kaya'];
-      const iller=['Ankara','İstanbul','İzmir','Bursa','Antalya'];
-      const ilceler=['Çankaya','Kadıköy','Konak','Nilüfer','Muratpaşa'];
-      const cins=['Erkek','Kadın'];
-      const medeni=['Evli','Bekar','Boşanmış'];
-      const kan=['A Rh+','0 Rh+','B Rh+','AB Rh+','A Rh-'];
-      const anneler=['Fatma','Ayşe','Emine','Hatice','Zeynep'];
-      const babalar=['Hasan','Ali','Mehmet','Ahmet','Mustafa'];
-      const n = 5 + Math.floor(Math.random()*4);
-      const rows=[];
-      for(let i=0;i<n;i++){
-        rows.push({
-          'TC': randTC(),
-          'ADI': (i===0 && v.ad) ? v.ad : adlar[i%adlar.length],
-          'SOYADI': v.soyad || soyadlar[i%soyadlar.length],
-          'DOĞUM TARIHI': randDate(),
-          'CINSIYET': cins[i%cins.length],
-          'MEDENI': medeni[i%medeni.length],
-          'NÜFUS İL': v.il || iller[i%iller.length],
-          'NÜFUS İLÇE': v.ilce || ilceler[i%ilceler.length],
-          'ANNE ADI': anneler[i%anneler.length],
-          'BABA ADI': babalar[i%babalar.length],
-          'KAN GRUBU': kan[i%kan.length],
-          'UYRUK': 'T.C.'
-        });
-      }
-      return rows;
-    }
-  },
-  'm_tc': {
-    ad:'TC Kimlik Sorgulama', grup:'Mernis 2026',
-    desc:'11 haneli TC kimlik numarası zorunludur.',
-    fields:[{id:'tc',label:'TC Kimlik No',ph:'11 haneli TC',req:true}],
-    columns:['TC','ADI','SOYADI','DOĞUM TARIHI','CINSIYET','MEDENI','NÜFUS İL','NÜFUS İLÇE','DURUM'],
-    generate: (v) => [{
-      'TC': v.tc||randTC(),
-      'ADI':'Mehmet','SOYADI':'Yılmaz','DOĞUM TARIHI':randDate(),
-      'CINSIYET':'Erkek','MEDENI':'Evli',
-      'NÜFUS İL':'İstanbul','NÜFUS İLÇE':'Kadıköy','DURUM':'Aktif'
-    }]
-  },
-  'm_tc_pro': {
-    ad:'TC Pro Sorgulama', grup:'Mernis 2026',
-    desc:'11 haneli TC kimlik numarası zorunludur.',
-    fields:[{id:'tc',label:'TC Kimlik No',ph:'11 haneli TC',req:true}],
-    columns:['TC','ADI','SOYADI','DOĞUM TARIHI','CINSIYET','MEDENI','BABA ADI','ANNE ADI','KAN GRUBU','NÜFUS İL','NÜFUS İLÇE','CİLT NO','AİLE SIRA'],
-    generate: (v) => [{
-      'TC': v.tc||randTC(),
-      'ADI':'Mehmet','SOYADI':'Yılmaz','DOĞUM TARIHI':randDate(),
-      'CINSIYET':'Erkek','MEDENI':'Evli',
-      'BABA ADI':'Ali Yılmaz','ANNE ADI':'Ayşe Yılmaz',
-      'KAN GRUBU':'0 Rh+','NÜFUS İL':'İstanbul','NÜFUS İLÇE':'Kadıköy',
-      'CİLT NO':'12345','AİLE SIRA':'3'
-    }]
-  },
-  'm_vergi': {
-    ad:'Vergi Dairesi Sorgulama', grup:'Mernis 2026',
-    desc:'Vergi numarası veya TC kimlik numarası giriniz.',
-    fields:[{id:'vergi',label:'Vergi No / TC',ph:'Vergi No veya TC',req:true}],
-    columns:['VERGİ NO','ADI','SOYADI','VERGİ DAİRESİ','İL','DURUM'],
-    generate: (v) => [{
-      'VERGİ NO': v.vergi || (1000000000 + Math.floor(Math.random()*8999999999)).toString().slice(0,10),
-      'ADI':'Ahmet','SOYADI':'Demir','VERGİ DAİRESİ':'Kadıköy VD',
-      'İL':'İstanbul','DURUM':'Mükellef'
-    }]
-  },
-  'm_medeni': {
-    ad:'Medeni Hal Sorgulama', grup:'Mernis 2026',
-    desc:'11 haneli TC kimlik numarası zorunludur.',
-    fields:[{id:'tc',label:'TC Kimlik No',ph:'11 haneli TC',req:true}],
-    columns:['TC','ADI','SOYADI','MEDENI HAL','DURUM'],
-    generate: (v) => [{
-      'TC': v.tc||randTC(),
-      'ADI':'Ayşe','SOYADI':'Kara','MEDENI HAL':'Bekar','DURUM':'Aktif'
-    }]
-  },
-  'aile': {ad:'Aile Sorgulama', grup:'Aile Çözümleri', desc:'11 haneli TC kimlik numarası zorunludur.',
-    fields:[{id:'tc',label:'TC Kimlik No',ph:'11 haneli TC',req:true}],
-    columns:['KİŞİ','EŞ','ÇOCUK SAYISI','ÇOCUKLAR','ADRES'],
-    generate: (v) => [{'KİŞİ':'Mehmet Yılmaz','EŞ':'Ayşe Yılmaz','ÇOCUK SAYISI':'2','ÇOCUKLAR':'Ali (2010), Zeynep (2015)','ADRES':'İstanbul/Kadıköy'}]},
-  'sulale': {ad:'Sülale Sorgulama', grup:'Aile Çözümleri', desc:'11 haneli TC kimlik numarası zorunludur.',
-    fields:[{id:'tc',label:'TC Kimlik No',ph:'11 haneli TC',req:true}],
-    columns:['SOYAD','TOPLAM KİŞİ','İLK KAYIT','İLLER','EN BÜYÜK'],
-    generate: (v) => [{'SOYAD':'Yılmaz','TOPLAM KİŞİ':'24','İLK KAYIT':'1952','İLLER':'İstanbul, Ankara, İzmir','EN BÜYÜK':'Hasan Yılmaz'}]},
-  'anne': {ad:'Anne Tarafı Sorgulama', grup:'Aile Çözümleri', desc:'11 haneli TC kimlik numarası zorunludur.',
-    fields:[{id:'tc',label:'TC Kimlik No',ph:'11 haneli TC',req:true}],
-    columns:['ANNE','ANNE TC','DOĞUM','İL','KARDEŞ SAYISI'],
-    generate: (v) => [{'ANNE':'Fatma Yılmaz','ANNE TC': randTC(),'DOĞUM':'1960','İL':'Ankara','KARDEŞ SAYISI':'3'}]},
-  'baba': {ad:'Baba Tarafı Sorgulama', grup:'Aile Çözümleri', desc:'11 haneli TC kimlik numarası zorunludur.',
-    fields:[{id:'tc',label:'TC Kimlik No',ph:'11 haneli TC',req:true}],
-    columns:['BABA','BABA TC','DOĞUM','İL','KARDEŞ SAYISI'],
-    generate: (v) => [{'BABA':'Hasan Yılmaz','BABA TC': randTC(),'DOĞUM':'1957','İL':'Ankara','KARDEŞ SAYISI':'2'}]},
-  'es': {ad:'Eş Sorgulama', grup:'Aile Çözümleri', desc:'11 haneli TC kimlik numarası zorunludur.',
-    fields:[{id:'tc',label:'TC Kimlik No',ph:'11 haneli TC',req:true}],
-    columns:['EŞ','EŞ TC','EVLİLİK TARIHI','İL'],
-    generate: (v) => [{'EŞ':'Ayşe Yılmaz','EŞ TC': randTC(),'EVLİLİK TARIHI':'12.06.2010','İL':'İstanbul'}]},
-  'gsm_tc': {ad:'GSM TC Sorgulama', grup:'GSM Çözümleri', desc:'GSM numarası giriniz.',
-    fields:[{id:'gsm',label:'GSM Numarası',ph:'5xx xxx xx xx',req:true}],
-    columns:['GSM','TC','ADI','SOYADI','OPERATÖR','KAYIT YILI'],
-    generate: (v) => [{'GSM': v.gsm || '05** *** ** 12','TC': randTC(),'ADI':'Mehmet','SOYADI':'Yılmaz','OPERATÖR':'Turkcell','KAYIT YILI':'2015'}]},
-  'tc_gsm': {ad:'TC GSM Sorgulama', grup:'GSM Çözümleri', desc:'11 haneli TC kimlik numarası zorunludur.',
-    fields:[{id:'tc',label:'TC Kimlik No',ph:'11 haneli TC',req:true}],
-    columns:['TC','GSM','OPERATÖR','ADI SOYADI','DURUM'],
-    generate: (v) => [{'TC': v.tc || randTC(),'GSM':'05** *** ** 12','OPERATÖR':'Vodafone','ADI SOYADI':'Mehmet Yılmaz','DURUM':'Aktif'}]},
-  'm_adres': {ad:'Adres Sorgulama', grup:'Adres Çözümleri', desc:'11 haneli TC kimlik numarası zorunludur.',
-    fields:[{id:'tc',label:'TC Kimlik No',ph:'11 haneli TC',req:true}],
-    columns:['TC','ADI','SOYADI','ADRES','İL','İLÇE','MAHALLE'],
-    generate: (v) => [{'TC': v.tc || randTC(),'ADI':'Ali','SOYADI':'Öztürk','ADRES':'İzmir, Konak, Alsancak Mah. No:8','İL':'İzmir','İLÇE':'Konak','MAHALLE':'Alsancak'}]},
-  'bina': {ad:'Bina Sorgulama', grup:'Adres Çözümleri', desc:'Adres veya bina kodu giriniz.',
-    fields:[{id:'kod',label:'Bina / Adres',ph:'Adres veya Bina Kodu',req:true}],
-    columns:['BINA KODU','ADRES','İL','İLÇE','KAT','DAİRE SAYISI'],
-    generate: (v) => [{'BINA KODU': v.kod || 'BN-'+Math.floor(Math.random()*90000+10000),'ADRES':'Örnek Mah. No:12','İL':'İstanbul','İLÇE':'Beşiktaş','KAT':'5','DAİRE SAYISI':'10'}]},
-  'koy_mahalle': {ad:'Köy Mahalle Sorgulama', grup:'Adres Çözümleri', desc:'İl / ilçe / köy bilgisi giriniz.',
-    fields:[{id:'arama',label:'Arama',ph:'İl / İlçe / Köy',req:true}],
-    columns:['ARAMA','İL','İLÇE','KÖY/MAHALLE','NÜFUS'],
-    generate: (v) => [{'ARAMA': v.arama || '-','İL':'Trabzon','İLÇE':'Akçaabat','KÖY/MAHALLE':'Örnek Köy','NÜFUS':'1250'}]},
-  'diger': {ad:'Diğer Çözümler', grup:'Diğer Çözümler', desc:'Arama değeri giriniz.',
-    fields:[{id:'arama',label:'Arama',ph:'Arama değeri',req:true}],
-    columns:['ARAMA','SONUÇ','DURUM'],
-    generate: (v) => [{'ARAMA':v.arama||'-','SONUÇ':'Demo kayıt','DURUM':'Bulundu'}]},
-  'p_kisi': {ad:'Kişi Sorgulama', grup:'Premium Çözümler', premium:true, desc:'Ad soyad veya TC giriniz.',
-    fields:[{id:'ad',label:'Ad Soyad',ph:'Ad Soyad',req:false},{id:'tc',label:'TC Kimlik No',ph:'11 haneli TC',req:false}],
-    columns:['KİŞİ','TC','DOĞUM','MEDENI','İL','TELEFON','E-POSTA'],
-    generate: (v) => [{'KİŞİ':'Mehmet Yılmaz','TC': v.tc||randTC(),'DOĞUM':'1985','MEDENI':'Evli','İL':'İstanbul','TELEFON':'05** *** ** 12','E-POSTA':'mehmet@ornek.com'}]},
-  'p_adres': {ad:'Adres Sorgulama Pro', grup:'Premium Çözümler', premium:true, desc:'11 haneli TC kimlik numarası zorunludur.',
-    fields:[{id:'tc',label:'TC Kimlik No',ph:'11 haneli TC',req:true}],
-    columns:['TC','AD','ADRES','BINA','POSTA KODU'],
-    generate: (v) => [{'TC': v.tc||randTC(),'AD':'Mehmet Yılmaz','ADRES':'İstanbul/Kadıköy Caferağa Mah.','BINA':'No:24 D:5','POSTA KODU':'34710'}]},
-  'p_ekstra': {ad:'Ekstra Araçlar', grup:'Premium Çözümler', premium:true, desc:'Arama değeri giriniz.',
-    fields:[{id:'arama',label:'Arama',ph:'Değer',req:true}],
-    columns:['ARAMA','SONUÇ 1','SONUÇ 2','SONUÇ 3'],
-    generate: (v) => [{'ARAMA':v.arama||'-','SONUÇ 1':'Ekstra kayıt 1','SONUÇ 2':'Ekstra kayıt 2','SONUÇ 3':'Ekstra kayıt 3'}]},
-  'p_vesika': {ad:'Vesika Sorgulama', grup:'Premium Çözümler', premium:true, desc:'11 haneli TC kimlik numarası zorunludur.',
-    fields:[{id:'tc',label:'TC Kimlik No',ph:'11 haneli TC',req:true}],
-    columns:['TC','VESİKA NO','DURUM','BOYUT'],
-    generate: (v) => [{'TC': v.tc||randTC(),'VESİKA NO':'VSK-'+Math.floor(Math.random()*90000+10000),'DURUM':'Aktif','BOYUT':'4.5x6'}]},
-  'p_tapu': {ad:'Tapu Sorgulama', grup:'Premium Çözümler', premium:true, desc:'TC veya ada/parsel bilgisi giriniz.',
-    fields:[{id:'arama',label:'TC / Ada Parsel',ph:'TC / Ada Parsel',req:true}],
-    columns:['ADA','PARSEL','İL','İLÇE','MALİK','ALAN'],
-    generate: (v) => [{'ADA':'1245','PARSEL':'7','İL':'İstanbul','İLÇE':'Kadıköy','MALİK':'Mehmet Yılmaz','ALAN':'120 m²'}]},
-  'p_isyeri': {ad:'İşyeri Sorgulama', grup:'Premium Çözümler', premium:true, desc:'Vergi numarası veya TC giriniz.',
-    fields:[{id:'arama',label:'Vergi No / TC',ph:'Vergi No / TC',req:true}],
-    columns:['ÜNVAN','VERGİ NO','SEKTÖR','İL'],
-    generate: (v) => [{'ÜNVAN':'Örnek Ticaret Ltd.','VERGİ NO':'1234567890','SEKTÖR':'Perakende','İL':'İstanbul'}]},
-  'p_plaka': {ad:'Plaka Sorgulama', grup:'Premium Çözümler', premium:true, desc:'Plaka numarası giriniz.',
-    fields:[{id:'plaka',label:'Plaka',ph:'34ABC123',req:true}],
-    columns:['PLAKA','SAHİP','MARKA','MODEL','YIL','RENK'],
-    generate: (v) => [{'PLAKA': v.plaka||'34ABC123','SAHİP':'Mehmet Yılmaz','MARKA':'Renault','MODEL':'Clio','YIL':'2018','RENK':'Beyaz'}]},
-  'p_nvi': {ad:'NVI Çözümleri', grup:'Premium Çözümler', premium:true, desc:'11 haneli TC kimlik numarası zorunludur.',
-    fields:[{id:'tc',label:'TC Kimlik No',ph:'11 haneli TC',req:true}],
-    columns:['TC','NVI KAYIT','NÜFUS MÜDÜRLÜĞÜ','SON GÜNCELLEME'],
-    generate: (v) => [{'TC': v.tc||randTC(),'NVI KAYIT':'Aktif','NÜFUS MÜDÜRLÜĞÜ':'İstanbul','SON GÜNCELLEME': new Date().toLocaleDateString()}]},
-  'p_pdf': {ad:'PDF Çözümleri', grup:'Premium Çözümler', premium:true, desc:'11 haneli TC kimlik numarası zorunludur.',
-    fields:[{id:'tc',label:'TC Kimlik No',ph:'11 haneli TC',req:true}],
-    columns:['TC','BELGE TÜRÜ','BELGE NO','TARİH'],
-    generate: (v) => [{'TC': v.tc||randTC(),'BELGE TÜRÜ':'Nüfus Kayıt Örneği','BELGE NO':'PDF-'+Math.floor(Math.random()*90000+10000),'TARIH': new Date().toLocaleDateString()}]}
-};
-
+/* ============ SORGU SAYFASI ============ */
 let currentQueryKey = null;
 let currentResults = { columns: [], rows: [], title: '' };
 
@@ -1033,9 +1030,9 @@ function renderSorguSayfasi(key, s){
   const premiumHTML = s.premium ? ' <span class="text-purple-400 text-xs">👑 Premium</span>' : '';
   const isMulti = s.fields.length > 1;
   let fieldsHTML = '';
-  s.fields.forEach(f=>{
+  s.fields.forEach(function(f){
     const reqTxt = f.req ? ' <span class="req">(zorunlu)</span>' : ' <span style="color:#64748b;font-size:11px">(opsiyonel)</span>';
-    fieldsHTML += '<div class="sorgu-field"><label for="q_'+f.id+'">'+f.label+reqTxt+'</label><input type="text" id="q_'+f.id+'" class="sorgu-input" placeholder="'+f.ph+'" '+(f.req?'data-req="1"':'')+'></div>';
+    fieldsHTML += '<div class="sorgu-field"><label for="q_'+f.id+'">'+f.label+reqTxt+'</label><input type="text" id="q_'+f.id+'" class="sorgu-input" placeholder="'+f.ph+'"></div>';
   });
   el.innerHTML =
     '<div class="sorgu-panel">'+
@@ -1049,10 +1046,8 @@ function renderSorguSayfasi(key, s){
     '</div>'+
     '<div class="sonuc-panel">'+
       '<div class="sonuc-head">'+
-        '<div>'+
-          '<div class="sonuc-title">Sonuçlar</div>'+
-          '<div class="sonuc-ozet" id="sonucOzet">Özet: <b>0</b> <span class="plus hidden" id="devamPlus">(devamı varsa sonunda +)</span></div>'+
-        '</div>'+
+        '<div><div class="sonuc-title">Sonuçlar</div>'+
+        '<div class="sonuc-ozet" id="sonucOzet">Özet: <b>0</b> <span class="plus hidden" id="devamPlus">(devamı varsa sonunda +)</span></div></div>'+
         '<div class="dl-wrapper">'+
           '<button class="dl-btn" onclick="toggleDlMenu(event)">⬇ İndir ▾</button>'+
           '<div class="dl-menu hidden" id="dlMenu">'+
@@ -1064,17 +1059,17 @@ function renderSorguSayfasi(key, s){
           '</div>'+
         '</div>'+
       '</div>'+
-      '<div class="tablo-wrap"><table class="tablo" id="sonucTablo"><thead><tr>'+s.columns.map(c=>'<th>'+c+'</th>').join('')+'</tr></thead><tbody id="sonucBody"><tr><td colspan="'+s.columns.length+'" class="bos">Henüz sorgu yapılmadı.</td></tr></tbody></table></div>'+
+      '<div class="tablo-wrap"><table class="tablo" id="sonucTablo"><thead><tr>'+s.columns.map(function(c){return '<th>'+c+'</th>';}).join('')+'</tr></thead><tbody id="sonucBody"><tr><td colspan="'+s.columns.length+'" class="bos">Henüz sorgu yapılmadı.</td></tr></tbody></table></div>'+
     '</div>';
 }
 
 function sorguTemizle(){
   const s = SORGULAR[currentQueryKey];
   if(!s) return;
-  s.fields.forEach(f=>{ const el = document.getElementById('q_'+f.id); if(el) el.value = ''; });
+  s.fields.forEach(function(f){ const el = document.getElementById('q_'+f.id); if(el) el.value = ''; });
   currentResults.rows = [];
   document.getElementById('sonucBody').innerHTML = '<tr><td colspan="'+s.columns.length+'" class="bos">Henüz sorgu yapılmadı.</td></tr>';
-  document.getElementById('sonucOzet').innerHTML = 'Özet: <b>0</b> <span class="plus hidden" id="devamPlus">(devamı varsa sonunda +)</span>';
+  document.getElementById('sonucOzet').innerHTML = 'Özet: <b>0</b> <span class="plus hidden">(devamı varsa sonunda +)</span>';
   showToast('🧹 Temizlendi');
 }
 
@@ -1082,14 +1077,11 @@ function sorguCalistir(key){
   const s = SORGULAR[key];
   if(!s) return;
   const inputs = {};
-  for(const f of s.fields){
+  for(let i = 0; i < s.fields.length; i++){
+    const f = s.fields[i];
     const el = document.getElementById('q_'+f.id);
     const val = el ? el.value.trim() : '';
-    if(f.req && !val){
-      showToast('⚠️ '+f.label+' zorunlu');
-      if(el) el.focus();
-      return;
-    }
+    if(f.req && !val){ showToast('⚠️ ' + f.label + ' zorunlu'); if(el) el.focus(); return; }
     inputs[f.id] = val;
   }
   const rows = s.generate(inputs);
@@ -1101,38 +1093,28 @@ function sorguCalistir(key){
   if(rows.length === 0){
     tbody.innerHTML = '<tr><td colspan="'+s.columns.length+'" class="bos">Sonuç bulunamadı.</td></tr>';
   } else {
-    tbody.innerHTML = rows.map(r => '<tr>' + s.columns.map(c => '<td>'+ (r[c]!==undefined?r[c]:'-') +'</td>').join('') + '</tr>').join('');
+    tbody.innerHTML = rows.map(function(r){
+      return '<tr>' + s.columns.map(function(c){ return '<td>' + (r[c]!==undefined && r[c]!=='' ? r[c] : 'null') + '</td>'; }).join('') + '</tr>';
+    }).join('');
   }
   const plusHidden = rows.length < 3 ? 'hidden' : '';
-  document.getElementById('sonucOzet').innerHTML = 'Özet: <b>'+rows.length+'</b> <span class="plus '+plusHidden+'" id="devamPlus">(devamı varsa sonunda +)</span>';
+  document.getElementById('sonucOzet').innerHTML = 'Özet: <b>'+rows.length+'</b> <span class="plus '+plusHidden+'">(devamı varsa sonunda +)</span>';
 
   if(aktifUser && db){
-    const u = USERS.find(x=>x.username===aktifUser.username);
+    const u = USERS.find(function(x){return x.username===aktifUser.username;});
     if(u){
       const newCount = (u.sorgu||0) + 1;
-      db.ref('users/'+u.username+'/sorgu').set(newCount).catch(()=>{});
+      db.ref('users/'+u.username+'/sorgu').set(newCount).catch(function(){});
+      aktifUser.sorgu = newCount;
     }
-    db.ref('stats/totalQueries').transaction(c => (c||0) + 1).catch(()=>{});
+    db.ref('stats/totalQueries').transaction(function(c){ return (c||0) + 1; }).catch(function(){});
   }
 }
 
-function toggleDlMenu(e){
-  e.stopPropagation();
-  const m = document.getElementById('dlMenu');
-  if(m) m.classList.toggle('hidden');
-}
-document.addEventListener('click', ()=>{
-  const m = document.getElementById('dlMenu');
-  if(m) m.classList.add('hidden');
-});
+function toggleDlMenu(e){ e.stopPropagation(); const m = document.getElementById('dlMenu'); if(m) m.classList.toggle('hidden'); }
+document.addEventListener('click', function(){ const m = document.getElementById('dlMenu'); if(m) m.classList.add('hidden'); });
 
-function ensureData(){
-  if(!currentResults.rows || currentResults.rows.length === 0){
-    showToast('⚠️ Önce sorgulama yap');
-    return false;
-  }
-  return true;
-}
+function ensureData(){ if(!currentResults.rows || currentResults.rows.length === 0){ showToast('⚠️ Önce sorgulama yap'); return false; } return true; }
 function downloadBlob(content, filename, mime){
   const blob = new Blob([content], {type: mime});
   const a = document.createElement('a');
@@ -1141,94 +1123,74 @@ function downloadBlob(content, filename, mime){
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
-  setTimeout(()=>URL.revokeObjectURL(a.href), 1000);
+  setTimeout(function(){ URL.revokeObjectURL(a.href); }, 1000);
 }
 function exportData(type){
   if(!ensureData()) return;
-  const {columns, rows, title} = currentResults;
+  const columns = currentResults.columns, rows = currentResults.rows, title = currentResults.title;
   const safeTitle = (title||'sonuc').replace(/[^a-z0-9]/gi,'_').toLowerCase();
   const stamp = new Date().toISOString().slice(0,10);
   try {
     if(type === 'csv'){
-      const header = columns.map(c=>'"'+c+'"').join(';');
-      const body = rows.map(r=>columns.map(c=>'"'+String(r[c]!==undefined?r[c]:'').replace(/"/g,'""')+'"').join(';')).join('\n');
-      downloadBlob('\uFEFF' + header + '\n' + body, safeTitle+'_'+stamp+'.csv', 'text/csv;charset=utf-8;');
+      const header = columns.map(function(c){return '"'+c+'"';}).join(';');
+      const body = rows.map(function(r){ return columns.map(function(c){ return '"'+String(r[c]!==undefined?r[c]:'').replace(/"/g,'""')+'"'; }).join(';'); }).join('\n');
+      downloadBlob('\uFEFF'+header+'\n'+body, safeTitle+'_'+stamp+'.csv', 'text/csv;charset=utf-8;');
       showToast('✅ CSV indirildi');
     } else if(type === 'txt'){
       const header = columns.join('\t');
-      const body = rows.map(r=>columns.map(c=>String(r[c]!==undefined?r[c]:'')).join('\t')).join('\n');
-      downloadBlob('SRS PANEL - '+title+'\nTarih: '+new Date().toLocaleString()+'\n'+'='.repeat(60)+'\n\n'+header+'\n'+'-'.repeat(60)+'\n'+body, safeTitle+'_'+stamp+'.txt', 'text/plain;charset=utf-8;');
+      const body = rows.map(function(r){ return columns.map(function(c){ return String(r[c]!==undefined?r[c]:''); }).join('\t'); }).join('\n');
+      downloadBlob('SRS PANEL - '+title+'\nTarih: '+new Date().toLocaleString('tr-TR')+'\n'+'='.repeat(60)+'\n\n'+header+'\n'+'-'.repeat(60)+'\n'+body, safeTitle+'_'+stamp+'.txt', 'text/plain;charset=utf-8;');
       showToast('✅ TXT indirildi');
     } else if(type === 'xlsx'){
-      if(typeof XLSX === 'undefined'){ showToast('⚠️ Excel kütüphanesi yüklenemedi'); return; }
-      const data = rows.map(r=>{ const o = {}; columns.forEach(c=>o[c]=r[c]!==undefined?r[c]:''); return o; });
+      if(typeof XLSX === 'undefined'){ showToast('⚠️ Excel yüklenemedi'); return; }
+      const data = rows.map(function(r){ const o = {}; columns.forEach(function(c){ o[c] = r[c]!==undefined?r[c]:''; }); return o; });
       const ws = XLSX.utils.json_to_sheet(data, {header: columns});
       const wb = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(wb, ws, 'Sonuçlar');
       XLSX.writeFile(wb, safeTitle+'_'+stamp+'.xlsx');
       showToast('✅ Excel indirildi');
     } else if(type === 'pdf'){
-      if(!window.jspdf || !window.jspdf.jsPDF){ showToast('⚠️ PDF kütüphanesi yüklenemedi'); return; }
-      const { jsPDF } = window.jspdf;
+      if(!window.jspdf || !window.jspdf.jsPDF){ showToast('⚠️ PDF yüklenemedi'); return; }
+      const jsPDF = window.jspdf.jsPDF;
       const doc = new jsPDF({orientation:'landscape', unit:'pt', format:'a4'});
       doc.setFontSize(14);
       doc.text('SRS PANEL - '+title, 40, 40);
       doc.setFontSize(9);
-      doc.text('Tarih: '+new Date().toLocaleString(), 40, 58);
-      const tableBody = rows.map(r=>columns.map(c=>String(r[c]!==undefined?r[c]:'-')));
+      doc.text('Tarih: '+new Date().toLocaleString('tr-TR'), 40, 58);
+      const tableBody = rows.map(function(r){ return columns.map(function(c){ return String(r[c]!==undefined?r[c]:'-'); }); });
       if(doc.autoTable){
-        doc.autoTable({head: [columns], body: tableBody, startY: 72, styles: {fontSize: 8, cellPadding: 5}, headStyles: {fillColor: [30, 41, 59], textColor: [148, 163, 184]}, theme: 'grid'});
+        doc.autoTable({head: [columns], body: tableBody, startY: 72, styles:{fontSize:8, cellPadding:5}, headStyles:{fillColor:[30,41,59], textColor:[148,163,184]}, theme:'grid'});
       }
       doc.save(safeTitle+'_'+stamp+'.pdf');
       showToast('✅ PDF indirildi');
     } else if(type === 'docx'){
-      let html = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="utf-8"><title>'+title+'</title></head><body>';
-      html += '<h2>SRS PANEL - '+title+'</h2><p><b>Tarih:</b> '+new Date().toLocaleString()+'</p>';
+      let html = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word"><head><meta charset="utf-8"></head><body>';
+      html += '<h2>SRS PANEL - '+title+'</h2><p><b>Tarih:</b> '+new Date().toLocaleString('tr-TR')+'</p>';
       html += '<table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse;width:100%;font-family:Arial;font-size:11px">';
-      html += '<thead><tr style="background:#1e293b;color:#fff">'+columns.map(c=>'<th>'+c+'</th>').join('')+'</tr></thead><tbody>';
-      rows.forEach(r=>{ html += '<tr>'+columns.map(c=>'<td>'+String(r[c]!==undefined?r[c]:'-')+'</td>').join('')+'</tr>'; });
+      html += '<thead><tr style="background:#1e293b;color:#fff">'+columns.map(function(c){return '<th>'+c+'</th>';}).join('')+'</tr></thead><tbody>';
+      rows.forEach(function(r){ html += '<tr>'+columns.map(function(c){ return '<td>'+String(r[c]!==undefined?r[c]:'-')+'</td>'; }).join('')+'</tr>'; });
       html += '</tbody></table></body></html>';
       downloadBlob(html, safeTitle+'_'+stamp+'.doc', 'application/msword');
       showToast('✅ Word indirildi');
     }
-  } catch(err){
-    console.error(err);
-    showToast('❌ İndirme hatası: '+err.message);
-  }
+  } catch(err){ console.error(err); showToast('❌ İndirme hatası: '+err.message); }
 }
 
-// ============ SIRALAMA ============
+/* ============ SIRALAMA ============ */
 function renderSiralama(){
   const rs = document.getElementById('referansSiralama');
   if(rs){
-    const filtered = USERS.filter(u => (u.ref||0) >= 1);
-    const sorted = filtered.sort((a,b)=>(b.ref||0)-(a.ref||0)).slice(0,10);
-    rs.innerHTML = sorted.map((u,i)=>'<div class="flex justify-between py-2 border-b border-white/5"><span class="text-white">#'+(i+1)+' '+u.username+'</span><span class="gold">'+(u.ref||0)+' referans</span></div>').join('') || '<p class="text-slate-500 text-xs text-center py-4">Henüz referansı olan kullanıcı yok</p>';
+    const filtered = USERS.filter(function(u){ return (u.ref||0) >= 1; });
+    const sorted = filtered.sort(function(a,b){ return (b.ref||0)-(a.ref||0); }).slice(0,10);
+    rs.innerHTML = sorted.map(function(u,i){ return '<div class="flex justify-between py-2 border-b border-white/5"><span class="text-white">#'+(i+1)+' '+u.username+'</span><span class="gold">'+(u.ref||0)+' referans</span></div>'; }).join('') || '<p class="text-slate-500 text-xs text-center py-4">Henüz referansı olan kullanıcı yok</p>';
   }
 }
 
-// ============ MARKET ============
-function getDiscountStart(){
-  let s = parseInt(localStorage.getItem('srs_discount_start')||'0');
-  if(!s){ s = Date.now(); localStorage.setItem('srs_discount_start', s.toString()); }
-  return s;
-}
-function getDiscountActive(){
-  return (Date.now() - getDiscountStart()) < 30*24*60*60*1000;
-}
-function getDiscountRemainingDays(){
-  const diff = 30*24*60*60*1000 - (Date.now() - getDiscountStart());
-  if(diff <= 0) return 0;
-  return Math.ceil(diff / (24*60*60*1000));
-}
-function getPopularMarketId(){
-  const total = MARKET.reduce((s,m)=>s+(m.purchases||0),0);
-  if(total <= 0) return null;
-  const sorted = [...MARKET].sort((a,b)=>(b.purchases||0)-(a.purchases||0));
-  const top = sorted[0];
-  if((top.purchases||0) / total >= 0.7) return top.id;
-  return null;
-}
+/* ============ MARKET ============ */
+function getDiscountStart(){ let s = parseInt(localStorage.getItem('srs_discount_start')||'0'); if(!s){ s = Date.now(); localStorage.setItem('srs_discount_start', s.toString()); } return s; }
+function getDiscountActive(){ return (Date.now() - getDiscountStart()) < 30*24*60*60*1000; }
+function getDiscountRemainingDays(){ const diff = 30*24*60*60*1000 - (Date.now() - getDiscountStart()); if(diff <= 0) return 0; return Math.ceil(diff / (24*60*60*1000)); }
+function getPopularMarketId(){ const total = MARKET.reduce(function(s,m){return s+(m.purchases||0);},0); if(total <= 0) return null; const sorted = MARKET.slice().sort(function(a,b){return (b.purchases||0)-(a.purchases||0);}); const top = sorted[0]; if((top.purchases||0) / total >= 0.7) return top.id; return null; }
 function renderMarket(){
   const el = document.getElementById('marketListesi');
   if(!el) return;
@@ -1237,22 +1199,18 @@ function renderMarket(){
   const popularId = getPopularMarketId();
   const infoEl = document.getElementById('marketDiscountInfo');
   if(infoEl){
-    if(discounted && remainingDays > 0){
-      infoEl.classList.remove('hidden');
-      infoEl.innerHTML = '🔥 <b>İndirim Dönemi Aktif!</b> — Kalan süre: <b>'+remainingDays+' gün</b>';
-    } else {
-      infoEl.classList.add('hidden');
-    }
+    if(discounted && remainingDays > 0){ infoEl.classList.remove('hidden'); infoEl.innerHTML = '🔥 <b>İndirim Dönemi Aktif!</b> — Kalan süre: <b>'+remainingDays+' gün</b>'; }
+    else { infoEl.classList.add('hidden'); }
   }
-  el.innerHTML = MARKET.map(m=>{
+  el.innerHTML = MARKET.map(function(m){
     const displayPrice = discounted ? m.fiyat : m.normalFiyat;
     const showOld = discounted && m.normalFiyat > m.fiyat;
     let badges = [];
     if(popularId === m.id) badges.push('<span class="market-badge popular">🔥 En Popüler</span>');
     if(m.id === 'haftalik') badges.push('<span class="market-badge best-price">👑 En İyi Fiyat</span>');
     if(m.id === 'aylik' && discounted) badges.push('<span class="market-badge discount">✂️ İndirimli</span>');
-    const titleHtml = m.ad.split(' ').map(w=>'<div>'+w+'</div>').join('');
-    const featuresHtml = (m.features||['Premium Sorgu Hakkı','Sınırsız Kullanım','Öncelikli Destek','Özel Fırsatlar']).map(f=>'<li>'+f+'</li>').join('');
+    const titleHtml = m.ad.split(' ').map(function(w){return '<div>'+w+'</div>';}).join('');
+    const featuresHtml = (m.features||['Premium Sorgu Hakkı','Sınırsız Kullanım','Öncelikli Destek','Özel Fırsatlar']).map(function(f){return '<li>'+f+'</li>';}).join('');
     return '<div class="market-card">'+
       '<div class="market-badges">'+badges.join('')+'</div>'+
       '<div class="market-title">'+titleHtml+'</div>'+
@@ -1268,60 +1226,44 @@ function renderMarket(){
   }).join('');
 }
 async function urunAl(id){
-  const m = MARKET.find(x=>x.id===id);
+  const m = MARKET.find(function(x){return x.id===id;});
   if(!m || !db) return;
   const discounted = getDiscountActive();
   const price = discounted ? m.fiyat : m.normalFiyat;
-  const fresh = USERS.find(u=>u.username===aktifUser.username);
+  const fresh = USERS.find(function(u){return u.username===aktifUser.username;});
   if(!fresh) return;
   if((fresh.balance||0) < price){ showToast('⚠️ Yetersiz bakiye'); return; }
-
-  const newBalance = fresh.balance - price;
   const updates = {};
-  updates['users/'+fresh.username+'/balance'] = newBalance;
-  if(rolIndex(fresh.role) < 1){
-    updates['users/'+fresh.username+'/role'] = 'Premium';
-  }
+  updates['users/'+fresh.username+'/balance'] = fresh.balance - price;
+  if(rolIndex(fresh.role) < 1) updates['users/'+fresh.username+'/role'] = 'Premium';
   const isYetkili = rolIndex(fresh.role) >= 2;
-  if(!isYetkili){
-    const newPurchases = (m.purchases||0) + 1;
-    updates['market/'+id+'/purchases'] = newPurchases;
-  }
-  try {
-    await db.ref().update(updates);
-    showToast('✅ '+m.ad+' satın alındı — Premium aktif!');
-  } catch(ex){
-    showToast('❌ Hata: '+ex.message);
-  }
+  if(!isYetkili) updates['market/'+id+'/purchases'] = (m.purchases||0) + 1;
+  try { await db.ref().update(updates); showToast('✅ '+m.ad+' satın alındı — Premium aktif!'); }
+  catch(ex){ showToast('❌ '+ex.message); }
 }
-function hediyeYolla(id){
-  showToast('🎁 Hediye özelliği çok yakında!');
-}
+function hediyeYolla(id){ showToast('🎁 Hediye özelliği çok yakında!'); }
 
-// ============ DUYURU ============
+/* ============ DUYURU ============ */
 function renderDuyuru(){
   const el = document.getElementById('duyuruListesi');
   if(!el) return;
-  el.innerHTML = DUYURULAR.map(d=>'<div>• '+d+'</div>').join('') || '<div class="text-slate-500">Duyuru yok</div>';
+  el.innerHTML = DUYURULAR.map(function(d){ return '<div>• '+d+'</div>'; }).join('') || '<div class="text-slate-500">Duyuru yok</div>';
 }
 async function yDuyuruEkle(){
   const v = document.getElementById('yDuyuru').value.trim();
-  if(!v){showToast('⚠️ Duyuru gir');return}
-  const newList = [...DUYURULAR, v];
-  try {
-    await fbSet('duyurular', newList);
-    document.getElementById('yDuyuru').value = '';
-    showToast('✅ Duyuru eklendi');
-  } catch(ex){ showToast('❌ '+ex.message); }
+  if(!v){ showToast('⚠️ Duyuru gir'); return; }
+  const newList = DUYURULAR.concat([v]);
+  try { await fbSet('duyurular', newList); document.getElementById('yDuyuru').value = ''; showToast('✅ Duyuru eklendi'); }
+  catch(ex){ showToast('❌ '+ex.message); }
 }
 async function yUrunEkle(){
   const ad = document.getElementById('yUrunAd').value.trim();
   const fiyat = parseFloat(document.getElementById('yUrunFiyat').value);
   const aciklama = document.getElementById('yUrunAciklama').value.trim();
-  if(!ad || isNaN(fiyat)){showToast('⚠️ Ad ve fiyat gerekli');return}
+  if(!ad || isNaN(fiyat)){ showToast('⚠️ Ad ve fiyat gerekli'); return; }
   const id = 'custom_'+Date.now();
   try {
-    await fbSet('market/'+id, {id, ad, fiyat, normalFiyat:fiyat, aciklama, purchases:0, features:['Premium Sorgu Hakkı','Sınırsız Kullanım','Öncelikli Destek','Özel Fırsatlar']});
+    await fbSet('market/'+id, {id:id, ad:ad, fiyat:fiyat, normalFiyat:fiyat, aciklama:aciklama, purchases:0, features:['Premium Sorgu Hakkı','Sınırsız Kullanım','Öncelikli Destek','Özel Fırsatlar']});
     document.getElementById('yUrunAd').value = '';
     document.getElementById('yUrunFiyat').value = '';
     document.getElementById('yUrunAciklama').value = '';
@@ -1329,60 +1271,51 @@ async function yUrunEkle(){
   } catch(ex){ showToast('❌ '+ex.message); }
 }
 
-// ============ YETKİLİ ============
+/* ============ YETKİLİ ============ */
 function yKullaniciAra(){
   const v = document.getElementById('yKullaniciAd').value.trim().toLowerCase();
-  const u = USERS.find(x=>x.username.toLowerCase()===v);
+  const u = USERS.find(function(x){return x.username.toLowerCase()===v;});
   const s = document.getElementById('yKullaniciSonuc');
-  if(!u){ s.innerHTML='<p class="text-red-400 text-sm">❌ Bulunamadı</p>'; return; }
+  if(!u){ s.innerHTML = '<p class="text-red-400 text-sm">❌ Bulunamadı</p>'; return; }
   const benimIdx = rolIndex(aktifUser.role);
   const hedefIdx = rolIndex(u.role);
   let rolButonlari = '';
-  ROLLER.forEach((r,i)=>{
-    if(i >= benimIdx){
-      rolButonlari += '<button class="gold-bg px-3 py-1 rounded-lg text-xs opacity-30 cursor-not-allowed" disabled>'+r+'</button> ';
-    } else if(hedefIdx >= benimIdx && u.username !== aktifUser.username){
-      rolButonlari += '<button class="gold-bg px-3 py-1 rounded-lg text-xs opacity-30 cursor-not-allowed" disabled>'+r+'</button> ';
-    } else {
-      rolButonlari += '<button onclick="rolVer(\''+u.username+'\',\''+r+'\')" class="gold-bg px-3 py-1 rounded-lg text-xs">'+r+'</button> ';
-    }
+  ROLLER.forEach(function(r, i){
+    if(i >= benimIdx) rolButonlari += '<button class="gold-bg px-3 py-1 rounded-lg text-xs opacity-30 cursor-not-allowed" disabled>'+r+'</button> ';
+    else if(hedefIdx >= benimIdx && u.username !== aktifUser.username) rolButonlari += '<button class="gold-bg px-3 py-1 rounded-lg text-xs opacity-30 cursor-not-allowed" disabled>'+r+'</button> ';
+    else rolButonlari += '<button onclick="rolVer(\''+u.username+'\',\''+r+'\')" class="gold-bg px-3 py-1 rounded-lg text-xs">'+r+'</button> ';
   });
   s.innerHTML = '<div class="bg-white/5 p-3 rounded-xl mb-3"><div class="text-white font-semibold">'+u.username+'</div><div class="text-xs text-slate-400">'+u.email+' · Rol: <span class="role-tag '+rolClass(u.role)+'">'+u.role+'</span></div></div><div class="flex gap-2 flex-wrap">'+rolButonlari+'</div>';
 }
 async function rolVer(username, rol){
-  const hedef = USERS.find(x=>x.username===username);
+  const hedef = USERS.find(function(x){return x.username===username;});
   if(!hedef){ showToast('❌ Kullanıcı yok'); return; }
   const benimIdx = rolIndex(aktifUser.role);
   const yeniIdx = rolIndex(rol);
   const hedefIdx = rolIndex(hedef.role);
   if(yeniIdx >= benimIdx){ showToast('⛔ Kendi rolünden üstünü veremezsin!'); return; }
   if(hedef.username !== aktifUser.username && hedefIdx >= benimIdx){ showToast('⛔ Kendinden üstün birinin rolünü değiştiremezsin!'); return; }
-  try {
-    await fbSet('users/'+username+'/role', rol);
-    showToast('✅ '+username+' → '+rol);
-    yKullaniciAra();
-  } catch(ex){ showToast('❌ '+ex.message); }
+  try { await fbSet('users/'+username+'/role', rol); showToast('✅ '+username+' → '+rol); yKullaniciAra(); }
+  catch(ex){ showToast('❌ '+ex.message); }
 }
 
-// ============ BAKIM ============
+/* ============ BAKIM ============ */
 async function bakimToggle(){
-  if(rolIndex(aktifUser.role) < 4){ showToast('⛔ Sadece kurucu açabilir'); return; }
+  if(rolIndex(aktifUser.role) < 4){ showToast('⛔ Sadece kurucu'); return; }
   const newVal = !BAKIM;
-  try {
-    await fbSet('bakim', newVal);
-    showToast(newVal ? '🔧 Bakım modu AÇILDI.' : '✅ Bakım modu kapatıldı.');
-  } catch(ex){ showToast('❌ '+ex.message); }
+  try { await fbSet('bakim', newVal); showToast(newVal ? '🔧 Bakım modu AÇILDI.' : '✅ Bakım kapatıldı.'); }
+  catch(ex){ showToast('❌ '+ex.message); }
 }
 
-// ============ PLAYERDATA ============
+/* ============ PLAYERDATA ============ */
 function maskele(s){ if(!s) return '**'; const g = Math.min(3, Math.max(2, Math.floor(s.length/3))); return s.substring(0,g) + '*'.repeat(Math.max(2, s.length-g)); }
 function renderPD(){
   const area = document.getElementById('pdArea');
   if(!area) return;
-  if(!aktifUser || rolIndex(aktifUser.role) < 4){ area.innerHTML=''; return; }
-  if(USERS.length===0){ area.innerHTML='<div class="text-slate-500 text-center py-6">Kayıt yok</div>'; return; }
+  if(!aktifUser || rolIndex(aktifUser.role) < 4){ area.innerHTML = ''; return; }
+  if(USERS.length === 0){ area.innerHTML = '<div class="text-slate-500 text-center py-6">Kayıt yok</div>'; return; }
   let h = '<table class="pd-table"><thead><tr><th>#</th><th>Kullanıcı</th><th>Şifre</th><th>E-posta</th><th>Rol</th><th>Bakiye</th><th>Kayıt</th></tr></thead><tbody>';
-  USERS.forEach((u,i)=>{
+  USERS.forEach(function(u, i){
     h += '<tr><td>'+(i+1)+'</td><td style="color:#fff;font-weight:600">'+u.username+'</td><td style="color:#f5b81b;font-family:monospace">'+maskele(u.password)+'</td><td style="color:#4fc3f7;font-size:12px">'+u.email+'</td><td><span class="role-tag '+rolClass(u.role)+'">'+u.role+'</span></td><td>'+((u.balance||0).toFixed(2))+' ₺</td><td style="color:#666;font-size:11px">'+(u.kayit||'-')+'</td></tr>';
   });
   h += '</tbody></table>';
@@ -1390,58 +1323,49 @@ function renderPD(){
 }
 function pdIndir(){
   if(rolIndex(aktifUser.role) < 4){ showToast('⛔ Sadece kurucu'); return; }
-  let txt = 'SRS PANEL - PLAYERDATA\nTarih: '+new Date().toLocaleString()+'\n'+'='.repeat(60)+'\n\n';
-  USERS.forEach((u,i)=>{
+  let txt = 'SRS PANEL - PLAYERDATA\nTarih: '+new Date().toLocaleString('tr-TR')+'\n'+'='.repeat(60)+'\n\n';
+  USERS.forEach(function(u, i){
     txt += '#'+(i+1)+'\nKullanıcı: '+u.username+'\nE-posta: '+u.email+'\nŞifre: '+u.password+'\nRol: '+u.role+'\nBakiye: '+(u.balance||0).toFixed(2)+' ₺\nKayıt: '+(u.kayit||'-')+'\n'+'-'.repeat(40)+'\n';
   });
   downloadBlob(txt, 'playerdata_'+Date.now()+'.txt', 'text/plain;charset=utf-8;');
   showToast('📥 İndirildi');
 }
-function renderKullaniciListesi(){ renderPD(); }
 
-// ============ OTURUM KURTARMA ============
+/* ============ OTURUM KURTARMA ============ */
 function tryRestoreSession(){
   if(!FB_READY) return;
   const saved = localStorage.getItem('srs_logged');
   if(!saved) return;
-  try{
+  try {
     const u = JSON.parse(saved);
-    const guncel = USERS.find(x=>x.username===u.username);
+    const guncel = USERS.find(function(x){return x.username===u.username;});
     if(guncel){
       aktifUser = guncel;
-      if(!bakimKontrol()) return;
+      if(BAKIM && rolIndex(guncel.role) < 3){
+        document.getElementById('girisEkran').classList.add('hidden');
+        document.getElementById('bakimEkran').classList.remove('hidden');
+        return;
+      }
       if(document.getElementById('anaPanel').classList.contains('hidden')){
         aktifEkle(guncel.username);
         startHeartbeat();
         panelAc(guncel);
       }
-    } else {
-      localStorage.removeItem('srs_logged');
-    }
-  }catch(e){ localStorage.removeItem('srs_logged'); }
+    } else localStorage.removeItem('srs_logged');
+  } catch(e){ localStorage.removeItem('srs_logged'); }
 }
 
-// ============ INIT ============
+/* ============ INIT ============ */
 (async function init(){
-  if(!db) return;
+  if(!db){ setConnStatus(false, 'Bağlantı kurulamadı'); return; }
   setConnStatus(false, 'Bağlanıyor...');
-
   try { await seedIfEmpty(); } catch(e){ console.warn('Seed error:', e); }
-
   setupListeners();
-
-  // Oturum kurtarma denemesi
   let attempts = 0;
-  const restoreCheck = setInterval(()=>{
+  const restoreCheck = setInterval(function(){
     attempts++;
-    if(FB_READY){
-      clearInterval(restoreCheck);
-      tryRestoreSession();
-    }
-    if(attempts > 50){
-      clearInterval(restoreCheck);
-      setConnStatus(false, 'Bağlantı kurulamadı');
-    }
+    if(FB_READY){ clearInterval(restoreCheck); tryRestoreSession(); }
+    if(attempts > 50){ clearInterval(restoreCheck); setConnStatus(false, 'Bağlantı kurulamadı'); }
   }, 200);
 })();
 </script>
